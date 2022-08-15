@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '770889539334',
     projectId: 'instacopy-2',
     storageBucket: 'instacopy-2.appspot.com',
-    iosClientId: '770889539334-jvpcc7v1fumjh1rlcve05ff96883i2lb.apps.googleusercontent.com',
+    iosClientId:
+        '770889539334-jvpcc7v1fumjh1rlcve05ff96883i2lb.apps.googleusercontent.com',
     iosBundleId: 'com.example.instacopy2',
   );
 }

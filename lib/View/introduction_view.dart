@@ -18,15 +18,14 @@ class _IntroductionViewState extends State<IntroductionView> {
           children: [
             ElevatedButton(
               onPressed: () {},
-              child: Text('Click'),
+              child: const Text('Click'),
             ),
             OutlinedButton(
               onPressed: () {},
-              child: Text('Click 2'),
+              child: const Text('Click 2'),
             ),
-            Text(
+            const Text(
               'Primario',
-              style: Theme.of(context).textTheme.bodyText1,
             )
           ],
         ),
