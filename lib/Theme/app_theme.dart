@@ -7,7 +7,7 @@ class AppTheme {
   BuildContext context;
 
   ThemeData get defaultTheme => ThemeData(
-      backgroundColor: AppColors.primaryBackgroundColor,
+      scaffoldBackgroundColor: AppColors.primaryBackgroundColor,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: AppColors.primaryButtonColor,
