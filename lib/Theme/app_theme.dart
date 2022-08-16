@@ -8,11 +8,10 @@ class AppTheme {
 
   ThemeData get defaultTheme => ThemeData(
       backgroundColor: AppColors.primaryBackgroundColor,
-      appBarTheme: AppBarTheme(color: AppColors.secondaryBackgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: AppColors.primaryButtonColor,
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             color: AppColors.primaryButtonFontColor,
           ),
         ),

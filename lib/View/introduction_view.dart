@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IntroductionView extends StatefulWidget {
   const IntroductionView({Key? key}) : super(key: key);
@@ -17,16 +18,23 @@ class _IntroductionViewState extends State<IntroductionView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {},
-              child: Text('Click'),
+              onPressed: () {
+                FirebaseFirestore.instance.collection("cities").doc("Sab").set({
+                  "name": "Santo Antonio",
+                  "state": "GO",
+                  "country": "BRA"
+                }).whenComplete(() {
+                  print('Completed');
+                });
+              },
+              child: const Text('Firebase'),
             ),
             OutlinedButton(
               onPressed: () {},
-              child: Text('Click 2'),
+              child: const Text('Click 2'),
             ),
-            Text(
+            const Text(
               'Primario',
-              style: Theme.of(context).textTheme.bodyText1,
             )
           ],
         ),
