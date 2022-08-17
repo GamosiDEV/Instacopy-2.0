@@ -26,4 +26,6 @@ class AppColors {
   static const Color textBoxColor = Color.fromRGBO(64, 64, 64, 0.25);
   static const Color textBoxFontColor = Color.fromRGBO(191, 191, 191, 0.75);
   static const Color textBoxBorderColor = Color.fromRGBO(128, 128, 128, 0.5);
+
+  static const Color textLinkColor = Colors.blueAccent;
 }
