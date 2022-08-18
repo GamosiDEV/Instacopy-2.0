@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseDatabaseController {
@@ -7,7 +9,6 @@ class FirebaseDatabaseController {
 
   bool hasLogged() {
     if (FirebaseAuth.instance.currentUser != null) {
-      print(FirebaseAuth.instance.currentUser?.uid);
       return true;
     }
     return false;
@@ -16,7 +17,7 @@ class FirebaseDatabaseController {
   Future<String> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      final credential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
