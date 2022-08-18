@@ -1,31 +1,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseDatabaseController {
+  static String FIREBASE_EMAIL_NOT_FOUND = 'user-not-found';
+  static String FIREBASE_WRONG_PASSWORD = 'wrong-password';
+  static String FIREBASE_SUCCESSFUL_LOGIN = 'successful-login';
+
   bool hasLogged() {
     if (FirebaseAuth.instance.currentUser != null) {
       print(FirebaseAuth.instance.currentUser?.uid);
       return true;
     }
-    print('not logged');
     return false;
   }
 
-  void login() async {
+  Future<String> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: 'gamosi.dev@gmail.com', password: '12345678');
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print(
-            'No user found for that email.'); //transformar isso em um Span Text (pop-up)
-      } else if (e.code == 'wrong-password') {
-        print(
-            'Wrong password provided for that user.'); //transformar isso em um Span Text (pop-up)
+      if (e.code == 'wrong-password') {
+        return FIREBASE_WRONG_PASSWORD;
+      } else {
+        return FIREBASE_EMAIL_NOT_FOUND;
       }
     }
   }
 
-  void signOut() async {
+  void signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();
   }
 }
