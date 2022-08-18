@@ -13,15 +13,15 @@ class IntroductionView extends StatefulWidget {
 }
 
 class _IntroductionViewState extends State<IntroductionView> {
-  late IntroductionController introductionController;
-  late FirebaseDatabaseController firebaseDatabaseController;
+  late IntroductionController introductionController = IntroductionController();
+  late FirebaseDatabaseController firebaseDatabaseController =
+      FirebaseDatabaseController();
 
   @override
   void initState() {
     super.initState();
 
-    introductionController = IntroductionController();
-    firebaseDatabaseController = FirebaseDatabaseController();
+    firebaseDatabaseController.signOutFromLoggedUser();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       verificadorDeUsuarioLogado(this.context);
