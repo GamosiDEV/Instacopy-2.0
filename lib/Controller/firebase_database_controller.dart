@@ -29,6 +29,16 @@ class FirebaseDatabaseController {
     }
   }
 
+  Future<String?> signUpWithEmailAndPassword(
+      String email, String password) async {
+    final userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    return userCredential.user?.uid;
+  }
+
+  void createNewAccountInUserCollection(
+      String id, String email, String fullname, String username) {}
+
   void signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();
   }
