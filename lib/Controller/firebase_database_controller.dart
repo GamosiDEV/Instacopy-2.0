@@ -21,7 +21,7 @@ class FirebaseDatabaseController {
           .signInWithEmailAndPassword(email: email, password: password);
       return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
+      if (e.code == FIREBASE_WRONG_PASSWORD) {
         return FIREBASE_WRONG_PASSWORD;
       } else {
         return FIREBASE_EMAIL_NOT_FOUND;

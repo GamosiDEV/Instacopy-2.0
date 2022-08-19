@@ -1,10 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Controller/login_controller.dart';
 import 'package:instacopy2/Theme/app_colors.dart';
 import 'package:instacopy2/View/forgot_password_view.dart';
-import 'package:instacopy2/View/home_feed_view.dart';
 import 'package:instacopy2/View/register_account_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -41,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               elevation: 8.0,
               color: Colors.white,
@@ -139,12 +137,12 @@ class _LoginViewState extends State<LoginView> {
 
   void onTapCreateAccountTextSpan() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ResgisterAccountView()));
+        MaterialPageRoute(builder: (context) => const ResgisterAccountView()));
   }
 
   void onTapForgotPasswordTextSpan() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ForgotPasswordView()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const ForgotPasswordView()));
   }
 
   void setEmailTextFieldErrorHint() {

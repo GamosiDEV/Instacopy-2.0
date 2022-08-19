@@ -24,7 +24,7 @@ class _IntroductionViewState extends State<IntroductionView> {
     firebaseDatabaseController.signOutFromLoggedUser();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      verificadorDeUsuarioLogado(this.context);
+      verificadorDeUsuarioLogado(context);
     });
   }
 
@@ -54,11 +54,11 @@ class _IntroductionViewState extends State<IntroductionView> {
   void verificadorDeUsuarioLogado(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 5), () {
       if (introductionController.hasLoggedUser()) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeFeedView()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeFeedView()));
       } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginView()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginView()));
       }
     });
   }

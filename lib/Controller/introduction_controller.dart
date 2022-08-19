@@ -4,13 +4,14 @@ class IntroductionController {
   late FirebaseDatabaseController _firebaseDatabaseController;
 
   IntroductionController() {
-    this._firebaseDatabaseController = FirebaseDatabaseController();
+    _firebaseDatabaseController = FirebaseDatabaseController();
   }
 
   bool hasLoggedUser() {
-    if (_firebaseDatabaseController.hasLogged())
+    if (_firebaseDatabaseController.hasLogged()) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 }
