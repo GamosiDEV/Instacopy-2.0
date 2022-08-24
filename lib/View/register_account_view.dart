@@ -10,7 +10,7 @@ class ResgisterAccountView extends StatefulWidget {
 }
 
 class _ResgisterAccountViewState extends State<ResgisterAccountView> {
-  RegisterAccountController _registerAccountController =
+  final RegisterAccountController _registerAccountController =
       RegisterAccountController();
   TextEditingController emailTextFieldController = TextEditingController();
   TextEditingController fullnameTextFieldController = TextEditingController();
@@ -25,7 +25,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
         child: SingleChildScrollView(
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               elevation: 10.0,
               child: Column(
