@@ -135,7 +135,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   }
 
   void onPressSignUp() {
-    _registerAccountController.signUpNewAccount(
+    _registerAccountController.createNewAccount(
         context,
         emailTextFieldController.text,
         fullnameTextFieldController.text,

@@ -1,6 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instacopy2/Model/users_model.dart';
+import 'package:instacopy2/firebase_cloudfirestore_names.dart';
 
 class FirebaseDatabaseController {
   static String FIREBASE_EMAIL_NOT_FOUND = 'user-not-found';
@@ -12,6 +15,10 @@ class FirebaseDatabaseController {
       return true;
     }
     return false;
+  }
+
+  String? getLoggedUserId() {
+    return FirebaseAuth.instance.currentUser?.uid;
   }
 
   Future<String> signInWithEmailAndPassword(
@@ -30,14 +37,25 @@ class FirebaseDatabaseController {
   }
 
   Future<String?> signUpWithEmailAndPassword(
-      String email, String password) async {
-    final userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
-    return userCredential.user?.uid;
+      //metodo esta retornando antes de pegar o resultado
+      String email,
+      String password) async {
+    String? userCredential = null;
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      userCredential = value.user?.uid;
+    });
+    return userCredential;
   }
 
-  void createNewAccountInUserCollection(
-      String id, String email, String fullname, String username) {}
+  Future<void> createNewAccountInUserCollection(UsersModel usersModel) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(usersModel.keyFromUser)
+        .set(usersModel.getMapFromThisModel())
+        .onError((e, _) => print("Error writing document: $e"));
+  }
 
   void signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();

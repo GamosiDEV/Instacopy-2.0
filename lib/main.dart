@@ -1,3 +1,4 @@
+import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/Theme/app_theme.dart';
 import 'package:instacopy2/View/introduction_view.dart';
 import 'package:flutter/material.dart';
