@@ -1,4 +1,6 @@
 //Coleção de Usuarios
+// ignore_for_file: constant_identifier_names
+
 const String FIRESTORE_DATABASE_COLLECTION_USERS = 'users';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_BIO = 'bio';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_BIRTH_DATE = 'birth-date';

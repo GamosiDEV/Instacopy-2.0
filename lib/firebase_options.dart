@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB72qS4TvxK_ogc5YDrnfWEDbQr-yV9Hqg',
-    appId: '1:770889539334:android:cebdecf4ad737d83e7c887',
+    appId: '1:770889539334:android:42687f6f25eed860e7c887',
     messagingSenderId: '770889539334',
     projectId: 'instacopy-2',
     storageBucket: 'instacopy-2.appspot.com',
@@ -59,12 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCpJELKFqxh5vyJyDo-9kN8L6ywoYQg-W8',
-    appId: '1:770889539334:ios:66f32ddfe2e2f4d0e7c887',
+    appId: '1:770889539334:ios:cb1317e5b4a9dadfe7c887',
     messagingSenderId: '770889539334',
     projectId: 'instacopy-2',
     storageBucket: 'instacopy-2.appspot.com',
-    iosClientId:
-        '770889539334-jvpcc7v1fumjh1rlcve05ff96883i2lb.apps.googleusercontent.com',
+    iosClientId: '770889539334-jvpcc7v1fumjh1rlcve05ff96883i2lb.apps.googleusercontent.com',
     iosBundleId: 'com.example.instacopy2',
   );
 }

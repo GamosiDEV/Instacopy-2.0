@@ -10,7 +10,7 @@ class LoginController {
   //bool hasPasswordValid = true;
 
   LoginController() {
-    this._firebaseDatabaseController = FirebaseDatabaseController();
+    _firebaseDatabaseController = FirebaseDatabaseController();
   }
 
   void _resetSignUpValidation() {
@@ -25,8 +25,8 @@ class LoginController {
         .signInWithEmailAndPassword(email, password)
         .then((value) {
       if (value == FirebaseDatabaseController.FIREBASE_SUCCESSFUL_LOGIN) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeFeedView()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeFeedView()));
       } else if (value == FirebaseDatabaseController.FIREBASE_EMAIL_NOT_FOUND) {
         hasEmailValid.value = false;
       } else if (value == FirebaseDatabaseController.FIREBASE_WRONG_PASSWORD) {
