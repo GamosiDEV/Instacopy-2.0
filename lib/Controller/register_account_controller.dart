@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
 
@@ -6,38 +7,44 @@ class RegisterAccountController {
   final FirebaseDatabaseController _firebaseDatabaseController =
       FirebaseDatabaseController();
 
-  void createNewAccount(BuildContext context, String email, String fullname,
-      String username, String password) async {
-    String resultado = await signUpOnFirebaseAuthenticator(email, password);
-    UsersModel usersModel = UsersModel(
-        keyFromUser: resultado,
-        email: email,
-        username: username,
-        fullname: fullname);
-
-    if (usersModel.keyFromUser != null && usersModel.keyFromUser != '000') {
-      await _firebaseDatabaseController
-          .createNewAccountInUserCollection(usersModel)
-          .then((value) => print(
-              'sucesso')) //volta a tela e verifica se existe usuario logado
-          .catchError(onError);
-    }
+  void createNewAccountOnFirestore(
+      UsersModel newUser, BuildContext context) async {
+    await _firebaseDatabaseController
+        .createNewAccountInUserCollection(newUser)
+        .whenComplete(() {
+      onSucess(context);
+    });
   }
 
-  void onError(dynamic e) {
-    print('Erro aqui');
-  }
-
-  Future<String> signUpOnFirebaseAuthenticator(
+  Future<String?> createAccountOnAuthAndReturnKeyFromNewUser(
       String email, String password) async {
-    String id = '000';
+    return await signUpOnFirebaseAuthenticator(email, password);
+  }
+
+  Future<String?> signUpOnFirebaseAuthenticator(
+      String email, String password) async {
+    String? id;
     await _firebaseDatabaseController
         .signUpWithEmailAndPassword(email, password)
         .then((value) {
-      if (value != null) {
-        id = value;
-      }
+      id = value;
     });
     return id;
+  }
+
+  void onSucess(BuildContext context) {
+    showSnackBar(
+        'Conta Criada com sucesso! Agora basta confirmar seu email e realizar o login para começar a usar.',
+        context);
+    Navigator.pop(context);
+  }
+
+  void showSnackBar(String snackBarText, BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text(
+        snackBarText,
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -10,6 +10,9 @@ class FirebaseDatabaseController {
   static String FIREBASE_WRONG_PASSWORD = 'wrong-password';
   static String FIREBASE_SUCCESSFUL_LOGIN = 'successful-login';
 
+  static const String FIREBASE_AUTH_EMAIL_ALREADY_IN_USE_ERROR =
+      'email-already-in-use';
+
   bool hasLogged() {
     if (FirebaseAuth.instance.currentUser != null) {
       return true;
@@ -26,6 +29,7 @@ class FirebaseDatabaseController {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
       if (e.code == FIREBASE_WRONG_PASSWORD) {
@@ -37,9 +41,7 @@ class FirebaseDatabaseController {
   }
 
   Future<String?> signUpWithEmailAndPassword(
-      //metodo esta retornando antes de pegar o resultado
-      String email,
-      String password) async {
+      String email, String password) async {
     String? userCredential = null;
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
