@@ -62,4 +62,8 @@ class FirebaseDatabaseController {
   void signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();
   }
+
+  Future<void> sendForgotPasswordMessage(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 }

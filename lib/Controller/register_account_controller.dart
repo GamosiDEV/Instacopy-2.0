@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
 
@@ -33,18 +34,9 @@ class RegisterAccountController {
   }
 
   void onSucess(BuildContext context) {
-    showSnackBar(
+    ApplicationController.showSnackBar(
         'Conta Criada com sucesso! Agora basta confirmar seu email e realizar o login para começar a usar.',
         context);
     Navigator.pop(context);
-  }
-
-  void showSnackBar(String snackBarText, BuildContext context) {
-    final snackBar = SnackBar(
-      content: Text(
-        snackBarText,
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
