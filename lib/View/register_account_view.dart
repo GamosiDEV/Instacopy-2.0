@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Controller/register_account_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
@@ -37,6 +38,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.introductionBackgroundColor,
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
@@ -267,19 +269,11 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
     } on FirebaseAuthException catch (e) {
       if (e.code ==
           FirebaseDatabaseController.FIREBASE_AUTH_EMAIL_ALREADY_IN_USE_ERROR) {
-        showSnackBar(
-            'Este e-mail ja pertence a uma conta, por favor tente novamente com outro e-mail');
+        ApplicationController.showSnackBar(
+            'Este e-mail ja pertence a uma conta, por favor tente novamente com outro e-mail',
+            context);
       }
     }
-  }
-
-  void showSnackBar(String snackBarText) {
-    final snackBar = SnackBar(
-      content: Text(
-        snackBarText,
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   bool isNewUserModelWithData() {
