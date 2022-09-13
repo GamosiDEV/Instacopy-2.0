@@ -1,6 +1,10 @@
-//Coleção de Usuarios
-// ignore_for_file: constant_identifier_names
+//Coleção de Feedback
+const String FIRESTORE_DATABASE_COLLECTION_FEEDBACKS = 'feedbacks';
+const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_EMAIL = 'feedback-sended-by';
+const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_FEEDBACK_TEXT =
+    'feedback-text';
 
+//Coleção de Usuarios
 const String FIRESTORE_DATABASE_COLLECTION_USERS = 'users';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_BIO = 'bio';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_BIRTH_DATE = 'birth-date';

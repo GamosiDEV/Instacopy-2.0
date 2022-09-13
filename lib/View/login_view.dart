@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/login_controller.dart';
 import 'package:instacopy2/Theme/app_colors.dart';
+import 'package:instacopy2/View/feedback_send_view.dart';
 import 'package:instacopy2/View/forgot_password_view.dart';
 import 'package:instacopy2/View/register_account_view.dart';
 
@@ -120,6 +121,19 @@ class _LoginViewState extends State<LoginView> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = onTapForgotPasswordTextSpan),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: RichText(
+                      text: TextSpan(
+                          text: 'Deixe aqui seu Feedback!',
+                          style: const TextStyle(
+                              color: AppColors.textLinkColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = onTapFeedbackTextSpan),
+                    ),
                   )
                 ],
               ),
@@ -161,5 +175,10 @@ class _LoginViewState extends State<LoginView> {
         passwordTextFieldErrorHint = 'Senha invalida!';
       }
     });
+  }
+
+  void onTapFeedbackTextSpan() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const FeedbackSendView()));
   }
 }

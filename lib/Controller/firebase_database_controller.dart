@@ -66,4 +66,11 @@ class FirebaseDatabaseController {
   Future<void> sendForgotPasswordMessage(String email) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
+
+  Future<void> sendFeedbakcToDatabase(Map<String, String> feedback) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_FEEDBACKS)
+        .doc()
+        .set(feedback);
+  }
 }
