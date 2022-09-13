@@ -37,6 +37,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.introductionBackgroundColor,
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
