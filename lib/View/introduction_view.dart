@@ -21,8 +21,6 @@ class _IntroductionViewState extends State<IntroductionView> {
   void initState() {
     super.initState();
 
-    firebaseDatabaseController.signOutFromLoggedUser();
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       verificadorDeUsuarioLogado(context);
     });
