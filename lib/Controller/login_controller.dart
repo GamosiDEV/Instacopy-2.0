@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
-import 'package:instacopy2/View/home_feed_view.dart';
+import 'package:instacopy2/View/home_view.dart';
 
 class LoginController {
   late FirebaseDatabaseController _firebaseDatabaseController;
