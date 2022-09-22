@@ -59,7 +59,7 @@ class FirebaseDatabaseController {
         .onError((e, _) => print("Error writing document: $e"));
   }
 
-  void signOutFromLoggedUser() async {
+  Future<void> signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();
   }
 

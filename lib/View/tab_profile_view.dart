@@ -15,11 +15,7 @@ class TabProfileView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {
-            FirebaseDatabaseController().signOutFromLoggedUser();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginView()));
-          },
+          onPressed: () {},
           child: const Text('Sair do Perfil'),
         ),
       ],
