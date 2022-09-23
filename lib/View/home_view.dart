@@ -29,7 +29,7 @@ class _HomeFeedViewState extends State<HomeFeedView>
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.camera_alt),
+            icon: Icon(Icons.add_a_photo),
           ),
           IconButton(
             onPressed: logout,
@@ -52,7 +52,7 @@ class _HomeFeedViewState extends State<HomeFeedView>
             label: 'Pesquisar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.photo),
+            icon: Icon(Icons.account_circle),
             label: 'Perfil',
           ),
         ],
