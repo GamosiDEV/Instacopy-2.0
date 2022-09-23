@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Controller/introduction_controller.dart';
 import 'package:instacopy2/Theme/app_colors.dart';
-import 'package:instacopy2/View/home_feed_view.dart';
+import 'package:instacopy2/View/home_view.dart';
 import 'package:instacopy2/View/login_view.dart';
 
 class IntroductionView extends StatefulWidget {
@@ -20,8 +20,6 @@ class _IntroductionViewState extends State<IntroductionView> {
   @override
   void initState() {
     super.initState();
-
-    firebaseDatabaseController.signOutFromLoggedUser();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       verificadorDeUsuarioLogado(context);

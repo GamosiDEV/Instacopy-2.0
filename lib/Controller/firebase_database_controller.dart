@@ -29,7 +29,6 @@ class FirebaseDatabaseController {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
       if (e.code == FIREBASE_WRONG_PASSWORD) {
@@ -48,6 +47,7 @@ class FirebaseDatabaseController {
         .then((value) {
       userCredential = value.user?.uid;
     });
+    await FirebaseAuth.instance.currentUser?.sendEmailVerification();
     return userCredential;
   }
 
@@ -59,7 +59,7 @@ class FirebaseDatabaseController {
         .onError((e, _) => print("Error writing document: $e"));
   }
 
-  void signOutFromLoggedUser() async {
+  Future<void> signOutFromLoggedUser() async {
     await FirebaseAuth.instance.signOut();
   }
 
