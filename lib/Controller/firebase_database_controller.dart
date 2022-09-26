@@ -73,4 +73,12 @@ class FirebaseDatabaseController {
         .doc()
         .set(feedback);
   }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getProfileUserData(
+      String userId) async {
+    return await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(userId)
+        .get();
+  }
 }

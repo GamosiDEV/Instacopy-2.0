@@ -46,4 +46,60 @@ class UsersModel {
       FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS: userUploads
     };
   }
+
+  void setUserModelWith(Map<String, dynamic>? userModelMap) {
+    if (userModelMap != null) {
+      keyFromUser = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY];
+      email = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_EMAIL];
+      username = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME];
+      fullname = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_FULLNAME];
+      bio = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_BIO];
+      birthDate = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_BIRTH_DATE];
+
+      commentsSended =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_COMMENTS_SENDED]
+                  as List)
+              .map((item) => item as String)
+              .toList();
+
+      followedBy =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY] as List)
+              .map((item) => item as String)
+              .toList();
+
+      followerOf =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF] as List)
+              .map((item) => item as String)
+              .toList();
+
+      genere = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_GENERE];
+
+      likesInComments =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_COMMENTS]
+                  as List)
+              .map((item) => item as String)
+              .toList();
+
+      likesInUploads =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_UPLOADS]
+                  as List)
+              .map((item) => item as String)
+              .toList();
+
+      myLinks = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_MY_LINKS];
+
+      profileImageReference = userModelMap[
+          FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_REFERENCE];
+
+      savedPosts =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS] as List)
+              .map((item) => item as String)
+              .toList();
+
+      userUploads =
+          (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS] as List)
+              .map((item) => item as String)
+              .toList();
+    }
+  }
 }
