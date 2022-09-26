@@ -18,8 +18,12 @@ class ApplicationController {
 
   void logout(BuildContext context) {
     _firebaseDatabaseController.signOutFromLoggedUser().then((_) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginView()));
+      returnToLoginScreen(context);
     });
+  }
+
+  void returnToLoginScreen(BuildContext context) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginView()));
   }
 }

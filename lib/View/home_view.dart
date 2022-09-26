@@ -28,7 +28,7 @@ class _HomeFeedViewState extends State<HomeFeedView>
         child: [
           TabFeedView(),
           TabSearchView(),
-          TabProfileView(profileUserId: '12'),
+          TabProfileView(profileUserId: getLoggedUserId()),
         ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -66,5 +66,9 @@ class _HomeFeedViewState extends State<HomeFeedView>
     setState(() {
       appBarTitle = newTitle;
     });
+  }
+
+  String? getLoggedUserId() {
+    return _homeController.getLoggedUserId();
   }
 }

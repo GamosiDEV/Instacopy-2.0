@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 
 class TabProfileView extends StatefulWidget {
-  final String profileUserId;
+  final String? profileUserId;
   const TabProfileView({Key? key, required this.profileUserId})
       : super(key: key);
 
@@ -26,7 +26,7 @@ class _TabProfileViewState extends State<TabProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(username),
+        title: Text(widget.profileUserId.toString()),
         actions: [
           IconButton(
             onPressed: () {},
