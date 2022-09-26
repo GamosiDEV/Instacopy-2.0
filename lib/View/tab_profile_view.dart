@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TabProfileView extends StatelessWidget {
-  TabProfileView({Key? key}) : super(key: key);
+  final Function(String) onProfileDataLoaded;
+
+  TabProfileView({Key? key, required this.onProfileDataLoaded})
+      : super(key: key);
 
   String numberOfPosts = '11';
   String numberOfFollowers = '283';
@@ -126,7 +129,7 @@ class TabProfileView extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: onEditProfileButtonPressed,
                                       child: Text(
                                         'Editar perfil',
                                         style: TextStyle(
@@ -206,5 +209,9 @@ class TabProfileView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onEditProfileButtonPressed() {
+    onProfileDataLoaded('Meu nome');
   }
 }

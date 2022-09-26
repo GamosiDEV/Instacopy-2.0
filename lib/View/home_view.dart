@@ -38,8 +38,11 @@ class _HomeFeedViewState extends State<HomeFeedView>
         ],
       ),
       body: Center(
-        child: [TabFeedView(), TabSearchView(), TabProfileView()]
-            .elementAt(_selectedIndex),
+        child: [
+          TabFeedView(),
+          TabSearchView(),
+          TabProfileView(onProfileDataLoaded: changeAppBarTitle),
+        ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -67,19 +70,23 @@ class _HomeFeedViewState extends State<HomeFeedView>
   }
 
   void _onItemTapped(int index) {
+    _selectedIndex = index;
+    switch (index) {
+      case 0:
+        changeAppBarTitle('Instacopy');
+        break;
+      case 1:
+        changeAppBarTitle('Instacopy');
+        break;
+      case 2:
+        changeAppBarTitle('');
+        break;
+    }
+  }
+
+  void changeAppBarTitle(String newTitle) {
     setState(() {
-      _selectedIndex = index;
-      switch (index) {
-        case 0:
-          appBarTitle = 'Instacopy';
-          break;
-        case 1:
-          appBarTitle = 'Instacopy';
-          break;
-        case 2:
-          appBarTitle = 'Username';
-          break;
-      }
+      appBarTitle = newTitle;
     });
   }
 
