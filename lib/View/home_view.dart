@@ -24,24 +24,11 @@ class _HomeFeedViewState extends State<HomeFeedView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitle),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.add_a_photo),
-          ),
-          IconButton(
-            onPressed: logout,
-            icon: Icon(Icons.logout),
-          ),
-        ],
-      ),
       body: Center(
         child: [
           TabFeedView(),
           TabSearchView(),
-          TabProfileView(onProfileDataLoaded: changeAppBarTitle),
+          TabProfileView(profileUserId: '12'),
         ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -70,30 +57,14 @@ class _HomeFeedViewState extends State<HomeFeedView>
   }
 
   void _onItemTapped(int index) {
-    _selectedIndex = index;
-    switch (index) {
-      case 0:
-        changeAppBarTitle('Instacopy');
-        break;
-      case 1:
-        changeAppBarTitle('Instacopy');
-        break;
-      case 2:
-        changeAppBarTitle('');
-        break;
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   void changeAppBarTitle(String newTitle) {
     setState(() {
       appBarTitle = newTitle;
-    });
-  }
-
-  void logout() {
-    _homeController.logoutUser().then((_) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginView()));
     });
   }
 }
