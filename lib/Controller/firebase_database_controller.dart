@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/firebase_cloudfirestore_names.dart';
 
@@ -80,5 +81,9 @@ class FirebaseDatabaseController {
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(userId)
         .get();
+  }
+
+  Future<String> getProfileImageUrlFrom(String imageReference) async {
+    return await FirebaseStorage.instance.ref(imageReference).getDownloadURL();
   }
 }

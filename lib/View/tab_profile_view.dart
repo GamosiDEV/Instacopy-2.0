@@ -9,7 +9,9 @@ import 'package:instacopy2/Model/users_model.dart';
 
 class TabProfileView extends StatefulWidget {
   final String? profileUserId;
-  const TabProfileView({Key? key, required this.profileUserId})
+  final String? loggedUserId;
+  const TabProfileView(
+      {Key? key, required this.profileUserId, required this.loggedUserId})
       : super(key: key);
 
   @override
@@ -24,33 +26,35 @@ class _TabProfileViewState extends State<TabProfileView> {
   String numberAreFollowing = '733';
   String fullname = 'Gabriel de Moura Silva';
   String bio = 'asdasd\ndasdasd\ndasdasd\ndasdasdas';
-  String appBarTitle = '';
+  //String appBarTitle = '';
 
   UsersModel usersModel = UsersModel(keyFromUser: ''); //widget.user
 
+  String? profileImageUrl;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitle),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.add_a_photo),
-          ),
-          IconButton(
-            onPressed: () => _applicationController.logout(context),
-            icon: Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: FutureBuilder(
-          future: getProfileUserDataByUserId(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done ||
-                snapshot.data != null) {
-              setSnapshotDataToUserModel(snapshot);
-              return DefaultTabController(
+    return FutureBuilder(
+        future: getProfileUserDataByUserId(),
+        builder: (context, snapshotFromUserModel) {
+          if (snapshotFromUserModel.connectionState == ConnectionState.done ||
+              snapshotFromUserModel.data != null) {
+            setSnapshotDataToUserModel(snapshotFromUserModel);
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(usersModel.username),
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.add_a_photo),
+                  ),
+                  IconButton(
+                    onPressed: () => _applicationController.logout(context),
+                    icon: Icon(Icons.logout),
+                  ),
+                ],
+              ),
+              body: DefaultTabController(
                 length: 2,
                 child: NestedScrollView(
                   headerSliverBuilder: (context, _) {
@@ -78,9 +82,36 @@ class _TabProfileViewState extends State<TabProfileView> {
                                           Padding(
                                             padding: EdgeInsets.fromLTRB(
                                                 6.0, 6.0, 14.0, 0),
-                                            child: CircleAvatar(
-                                              radius: 42.0,
-                                              backgroundColor: Colors.red,
+                                            child: ClipOval(
+                                              child: SizedBox.fromSize(
+                                                size: Size.fromRadius(42),
+                                                child: profileImageUrl != null
+                                                    ? setProfileImageFrom(
+                                                        profileImageUrl
+                                                            .toString())
+                                                    : FutureBuilder(
+                                                        future:
+                                                            getProfileImageUrl(),
+                                                        builder: (context,
+                                                            snapshotFromProfileImage) {
+                                                          if (snapshotFromProfileImage
+                                                                      .data !=
+                                                                  null &&
+                                                              snapshotFromProfileImage
+                                                                      .connectionState ==
+                                                                  ConnectionState
+                                                                      .done) {
+                                                            profileImageUrl =
+                                                                snapshotFromProfileImage
+                                                                        .data
+                                                                    as String;
+                                                            return setProfileImageFrom(
+                                                                profileImageUrl
+                                                                    .toString());
+                                                          }
+                                                          return CircularProgressIndicator();
+                                                        }),
+                                              ),
                                             ),
                                           ),
                                           Padding(
@@ -92,7 +123,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  numberOfPosts,
+                                                  usersModel.userUploads.length
+                                                      .toString(),
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -112,7 +144,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  numberOfFollowers,
+                                                  usersModel.followedBy.length
+                                                      .toString(),
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -132,7 +165,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  numberAreFollowing,
+                                                  usersModel.followerOf.length
+                                                      .toString(),
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -155,12 +189,12 @@ class _TabProfileViewState extends State<TabProfileView> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            fullname,
+                                            usersModel.fullname,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            bio,
+                                            usersModel.bio,
                                             maxLines: 4,
                                           ),
                                         ],
@@ -171,36 +205,55 @@ class _TabProfileViewState extends State<TabProfileView> {
                                       width: double.infinity,
                                       child: Row(
                                         children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: ElevatedButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  'Editar perfil',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                          !hasTheLoggedUserProfile()
+                                              ? Container()
+                                              : Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: ElevatedButton(
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        'Editar perfil',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: ElevatedButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  'Seguir',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                          hasTheLoggedUserProfile()
+                                              ? Container()
+                                              : Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        if (hasProfileFollowedByLoggedUser()) {
+                                                          print(
+                                                              'Deixar de seguir');
+                                                          //metodo para deixar de seguir
+                                                        } else {
+                                                          print('Seguir');
+                                                          //metodo para seguir
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        hasProfileFollowedByLoggedUser()
+                                                            ? 'Deixar de Seguir'
+                                                            : 'Seguir',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -258,11 +311,15 @@ class _TabProfileViewState extends State<TabProfileView> {
                     ),
                   ),
                 ),
-              );
-            }
-            return CircularProgressIndicator();
-          }),
-    );
+              ),
+            );
+          }
+          return Container(
+              width: double.infinity,
+              height: double.infinity,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator());
+        });
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>>
@@ -276,5 +333,31 @@ class _TabProfileViewState extends State<TabProfileView> {
     Map<String, dynamic> mapFromSnapshotData =
         DocData.data() as Map<String, dynamic>;
     usersModel.setUserModelWith(mapFromSnapshotData);
+  }
+
+  Future<String> getProfileImageUrl() {
+    return _tabProfileController
+        .getProfileImageUrlFrom(usersModel.profileImageReference);
+  }
+
+  Widget setProfileImageFrom(String url) {
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+    );
+  }
+
+  bool hasTheLoggedUserProfile() {
+    if (widget.loggedUserId == widget.profileUserId) {
+      return true;
+    }
+    return false;
+  }
+
+  bool hasProfileFollowedByLoggedUser() {
+    if (usersModel.followedBy.contains(widget.loggedUserId)) {
+      return true;
+    }
+    return false;
   }
 }

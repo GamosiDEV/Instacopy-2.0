@@ -10,4 +10,8 @@ class TabProfileController {
       String userId) async {
     return await _firebaseDatabaseController.getProfileUserData(userId);
   }
+
+  Future<String> getProfileImageUrlFrom(String imageReference) {
+    return _firebaseDatabaseController.getProfileImageUrlFrom(imageReference);
+  }
 }

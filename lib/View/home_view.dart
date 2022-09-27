@@ -28,7 +28,10 @@ class _HomeFeedViewState extends State<HomeFeedView>
         child: [
           TabFeedView(),
           TabSearchView(),
-          TabProfileView(profileUserId: getLoggedUserId()),
+          TabProfileView(
+            profileUserId: getLoggedUserId(),
+            loggedUserId: getLoggedUserId(),
+          ),
         ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
