@@ -24,22 +24,15 @@ class _HomeFeedViewState extends State<HomeFeedView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitle),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.camera_alt),
-          ),
-          IconButton(
-            onPressed: logout,
-            icon: Icon(Icons.logout),
-          ),
-        ],
-      ),
       body: Center(
-        child: [TabFeedView(), TabSearchView(), TabProfileView()]
-            .elementAt(_selectedIndex),
+        child: [
+          TabFeedView(),
+          TabSearchView(),
+          TabProfileView(
+            profileUserId: getLoggedUserId(),
+            loggedUserId: getLoggedUserId(),
+          ),
+        ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -52,7 +45,7 @@ class _HomeFeedViewState extends State<HomeFeedView>
             label: 'Pesquisar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.photo),
+            icon: Icon(Icons.account_circle),
             label: 'Perfil',
           ),
         ],
@@ -69,24 +62,16 @@ class _HomeFeedViewState extends State<HomeFeedView>
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      switch (index) {
-        case 0:
-          appBarTitle = 'Instacopy';
-          break;
-        case 1:
-          appBarTitle = 'Instacopy';
-          break;
-        case 2:
-          appBarTitle = 'Username';
-          break;
-      }
     });
   }
 
-  void logout() {
-    _homeController.logoutUser().then((_) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginView()));
+  void changeAppBarTitle(String newTitle) {
+    setState(() {
+      appBarTitle = newTitle;
     });
+  }
+
+  String? getLoggedUserId() {
+    return _homeController.getLoggedUserId();
   }
 }

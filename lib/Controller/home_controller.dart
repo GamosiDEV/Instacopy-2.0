@@ -4,7 +4,14 @@ class HomeController {
   final FirebaseDatabaseController _firebaseDatabaseController =
       FirebaseDatabaseController();
 
-  Future<void> logoutUser() async {
-    await _firebaseDatabaseController.signOutFromLoggedUser();
+  String? getLoggedUserId() {
+    return _firebaseDatabaseController.getLoggedUserId();
+  }
+
+  bool hasNull(String userId) {
+    if (userId == null) {
+      return true;
+    }
+    return false;
   }
 }
