@@ -236,10 +236,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                         if (hasProfileFollowedByLoggedUser()) {
                                                           print(
                                                               'Deixar de seguir');
-                                                          //metodo para deixar de seguir
+                                                          //TODO-metodo para deixar de seguir
                                                         } else {
                                                           print('Seguir');
-                                                          //metodo para seguir
+                                                          //TODO-metodo para seguir
                                                         }
                                                       },
                                                       child: Text(
@@ -341,10 +341,18 @@ class _TabProfileViewState extends State<TabProfileView> {
   }
 
   Widget setProfileImageFrom(String url) {
-    return Image.network(
-      url,
-      fit: BoxFit.cover,
+    return FadeInImage(
+      image: url == ''
+          ? placeHolderProfileImage()
+          : NetworkImage(
+              url,
+            ),
+      placeholder: placeHolderProfileImage(),
     );
+  }
+
+  ImageProvider placeHolderProfileImage() {
+    return const AssetImage('assets/images/profile.jpg');
   }
 
   bool hasTheLoggedUserProfile() {

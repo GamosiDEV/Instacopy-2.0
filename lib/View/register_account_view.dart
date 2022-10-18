@@ -264,6 +264,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
               email: emailTextFieldController.text,
               fullname: fullnameTextFieldController.text,
               username: usernameTextFieldController.text);
+          //setStorageImageReferenceToNewUserModel(value);
         }
       });
     } on FirebaseAuthException catch (e) {
