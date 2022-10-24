@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/tab_profile_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
+import 'package:instacopy2/View/upload_image_view.dart';
 
 class TabProfileView extends StatefulWidget {
   final String? profileUserId;
@@ -45,7 +46,9 @@ class _TabProfileViewState extends State<TabProfileView> {
                 title: Text(usersModel.username),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: widget.profileUserId == widget.loggedUserId
+                        ? toUploadImageView
+                        : null,
                     icon: Icon(Icons.add_a_photo),
                   ),
                   IconButton(
@@ -367,5 +370,10 @@ class _TabProfileViewState extends State<TabProfileView> {
       return true;
     }
     return false;
+  }
+
+  void toUploadImageView() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const UploadImageView()));
   }
 }
