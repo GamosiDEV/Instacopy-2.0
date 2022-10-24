@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/firebase_cloudfirestore_names.dart';
+import 'package:path/path.dart';
 
 class FirebaseDatabaseController {
   static String FIREBASE_EMAIL_NOT_FOUND = 'user-not-found';
@@ -92,5 +94,30 @@ class FirebaseDatabaseController {
           .getDownloadURL();
     }
     return '';
+  }
+
+  Future<String> sendImageToStorageAndGetReference(
+      File selectedFile, String uploaderId) async {
+    String newImageReference = FIREBASE_STORAGE_USERS +
+        uploaderId +
+        FIREBASE_STORAGE_USERS_UPLOADS +
+        basename(selectedFile.path);
+
+    await FirebaseStorage.instance
+        .ref()
+        .child(newImageReference)
+        .putFile(selectedFile);
+
+    return newImageReference;
+  }
+
+  void setIdToUploadAndSendToDatabase(UploadsModel upload) async {
+    final instance = FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc();
+
+    upload.keyFromUpload = instance.id;
+
+    instance.set(upload.getMapFromThisModel());
   }
 }

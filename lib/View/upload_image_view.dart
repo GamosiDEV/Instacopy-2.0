@@ -1,14 +1,19 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:instacopy2/Controller/upload_image_controller.dart';
+import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:file_picker/file_picker.dart';
 
 class UploadImageView extends StatefulWidget {
-  const UploadImageView({Key? key}) : super(key: key);
+  final String? loggedUserId;
+  const UploadImageView({Key? key, required this.loggedUserId})
+      : super(key: key);
 
   @override
   State<UploadImageView> createState() => _UploadImageViewState();
@@ -19,6 +24,8 @@ class _UploadImageViewState extends State<UploadImageView> {
   String? _selectedFilePath;
   final _formKey = GlobalKey<FormState>();
   final imageDescriptionController = TextEditingController();
+
+  UploadImageController _uploadImageController = UploadImageController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,7 @@ class _UploadImageViewState extends State<UploadImageView> {
               onPressed: hasUploadEnabled && hasSlectedFilePathValid()
                   ? () {
                       disableUploadButton();
-                      uploadNewImageToLoggedProfile();
+                      sendNewUploadToLoggedProfile();
                       popUploadImageView();
                     }
                   : null,
@@ -92,12 +99,6 @@ class _UploadImageViewState extends State<UploadImageView> {
                           hintText: 'Digite uma descrição para imagem',
                           border: InputBorder.none,
                         ),
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Caption is empty';
-                          }
-                          return null;
-                        },
                       ),
                     ),
                   ),
@@ -108,7 +109,16 @@ class _UploadImageViewState extends State<UploadImageView> {
     );
   }
 
-  void uploadNewImageToLoggedProfile() {}
+  void sendNewUploadToLoggedProfile() {
+    UploadsModel upload = getModelFromData();
+    _uploadImageController.sendNewImageToStorageAndUploadToDatabase(
+        upload, _selectedFilePath.toString());
+  }
+
+  UploadsModel getModelFromData() {
+    return UploadsModel(imageDescriptionController.text.toString(),
+        Timestamp.now(), widget.loggedUserId.toString());
+  }
 
   void disableUploadButton() {
     setState(() {

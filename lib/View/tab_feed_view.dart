@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 
 class TabFeedView extends StatefulWidget {
-  const TabFeedView({Key? key}) : super(key: key);
+  final String? loggedUserId;
+  const TabFeedView({Key? key, required this.loggedUserId}) : super(key: key);
 
   @override
   State<TabFeedView> createState() => _TabFeedViewState();
@@ -18,7 +19,7 @@ class _TabFeedViewState extends State<TabFeedView> {
         title: Text('Instacopy'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: toUploadImageView,
             icon: Icon(Icons.add_a_photo),
           ),
           IconButton(
@@ -42,5 +43,9 @@ class _TabFeedViewState extends State<TabFeedView> {
         ),
       ),
     );
+  }
+
+  void toUploadImageView() {
+    _applicationController.toUploadImageView(context, widget.loggedUserId);
   }
 }

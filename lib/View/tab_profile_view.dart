@@ -373,7 +373,6 @@ class _TabProfileViewState extends State<TabProfileView> {
   }
 
   void toUploadImageView() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const UploadImageView()));
+    _applicationController.toUploadImageView(context, widget.loggedUserId);
   }
 }
