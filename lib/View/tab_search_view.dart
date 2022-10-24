@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 
 class TabSearchView extends StatefulWidget {
-  const TabSearchView({Key? key}) : super(key: key);
+  final String? loggedUserId;
+  const TabSearchView({Key? key, required this.loggedUserId}) : super(key: key);
 
   @override
   State<TabSearchView> createState() => _TabSearchViewState();
@@ -18,7 +19,7 @@ class _TabSearchViewState extends State<TabSearchView> {
         title: Text('Instacopy'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: toUploadImageView,
             icon: Icon(Icons.add_a_photo),
           ),
           IconButton(
@@ -42,5 +43,9 @@ class _TabSearchViewState extends State<TabSearchView> {
         ),
       ),
     );
+  }
+
+  void toUploadImageView() {
+    _applicationController.toUploadImageView(context, widget.loggedUserId);
   }
 }

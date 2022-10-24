@@ -26,8 +26,12 @@ class _HomeFeedViewState extends State<HomeFeedView>
     return Scaffold(
       body: Center(
         child: [
-          TabFeedView(),
-          TabSearchView(),
+          TabFeedView(
+            loggedUserId: getLoggedUserId(),
+          ),
+          TabSearchView(
+            loggedUserId: getLoggedUserId(),
+          ),
           TabProfileView(
             profileUserId: getLoggedUserId(),
             loggedUserId: getLoggedUserId(),

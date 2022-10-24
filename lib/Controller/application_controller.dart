@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/View/login_view.dart';
+import 'package:instacopy2/View/upload_image_view.dart';
 
 class ApplicationController {
   FirebaseDatabaseController _firebaseDatabaseController =
@@ -25,5 +26,12 @@ class ApplicationController {
   void returnToLoginScreen(BuildContext context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginView()));
+  }
+
+  void toUploadImageView(BuildContext context, userId) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => UploadImageView(loggedUserId: userId)));
   }
 }

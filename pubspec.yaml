@@ -39,6 +39,8 @@ dependencies:
   cloud_firestore: ^3.4.4
   firebase_storage: ^10.3.5
   flutter_launcher_icons: ^0.10.0
+  transparent_image: ^2.0.0
+  file_picker: ^5.2.2
 
 dev_dependencies:
   flutter_test:
