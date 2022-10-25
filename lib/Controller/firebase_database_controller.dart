@@ -119,6 +119,8 @@ class FirebaseDatabaseController {
     upload.keyFromUpload = instance.id;
 
     instance.set(upload.getMapFromThisModel());
+
+    addIdOfUploadToUser(upload.keyFromUpload, upload.uploaderKey);
   }
 
   Future<List<UploadsModel>> getUploadsAndDonwloadUrl(
@@ -152,5 +154,15 @@ class FirebaseDatabaseController {
         .ref()
         .child(storageReference)
         .getDownloadURL();
+  }
+
+  void addIdOfUploadToUser(String keyFromUpload, String uploaderKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(uploaderKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS:
+          FieldValue.arrayUnion([keyFromUpload])
+    });
   }
 }
