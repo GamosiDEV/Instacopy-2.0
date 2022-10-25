@@ -119,5 +119,50 @@ class FirebaseDatabaseController {
     upload.keyFromUpload = instance.id;
 
     instance.set(upload.getMapFromThisModel());
+
+    addIdOfUploadToUser(upload.keyFromUpload, upload.uploaderKey);
+  }
+
+  Future<List<UploadsModel>> getUploadsAndDonwloadUrl(
+      List<String> listOfKeys) async {
+    List<UploadsModel> listOfUploads = [];
+
+    for (String uploadKey in listOfKeys) {
+      await FirebaseFirestore.instance
+          .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+          .get()
+          .then((allUploads) async {
+        for (final uploadDataFromDatabase in allUploads.docs) {
+          if (uploadKey == uploadDataFromDatabase.id) {
+            UploadsModel upload = UploadsModel('', Timestamp.now(), '');
+            upload.setUserModelWith(uploadDataFromDatabase.data());
+            await getDownloadUrlFrom(upload.uploadStorageReference)
+                .then((downloadUrl) {
+              upload.downloadedImageURL = downloadUrl.toString();
+            });
+            listOfUploads.add(upload);
+          }
+        }
+      });
+    }
+
+    return listOfUploads;
+  }
+
+  Future<String> getDownloadUrlFrom(String storageReference) async {
+    return await FirebaseStorage.instance
+        .ref()
+        .child(storageReference)
+        .getDownloadURL();
+  }
+
+  void addIdOfUploadToUser(String keyFromUpload, String uploaderKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(uploaderKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS:
+          FieldValue.arrayUnion([keyFromUpload])
+    });
   }
 }
