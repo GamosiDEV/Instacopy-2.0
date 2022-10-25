@@ -118,19 +118,7 @@ class _TabProfileViewState extends State<TabProfileView> {
                                             ),
                                           ),
                                           InkWell(
-                                            onTap: () {
-                                              final contextFromKey =
-                                                  keyFromUploadedImageCard
-                                                      .currentContext;
-                                              if (contextFromKey != null) {
-                                                Scrollable.ensureVisible(
-                                                  contextFromKey,
-                                                  duration: const Duration(
-                                                      milliseconds: 400),
-                                                  curve: Curves.easeInOut,
-                                                );
-                                              }
-                                            },
+                                            onTap: scrollScreenToUploadsCard,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(6.0),
@@ -392,5 +380,16 @@ class _TabProfileViewState extends State<TabProfileView> {
 
   void toUploadImageView() {
     _applicationController.toUploadImageView(context, widget.loggedUserId);
+  }
+
+  void scrollScreenToUploadsCard() {
+    final contextFromKey = keyFromUploadedImageCard.currentContext;
+    if (contextFromKey != null) {
+      Scrollable.ensureVisible(
+        contextFromKey,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 }
