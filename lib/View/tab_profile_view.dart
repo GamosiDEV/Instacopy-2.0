@@ -27,9 +27,9 @@ class _TabProfileViewState extends State<TabProfileView> {
   String numberAreFollowing = '733';
   String fullname = 'Gabriel de Moura Silva';
   String bio = 'asdasd\ndasdasd\ndasdasd\ndasdasdas';
-  //String appBarTitle = '';
 
-  UsersModel usersModel = UsersModel(keyFromUser: ''); //widget.user
+  UsersModel usersModel = UsersModel(keyFromUser: '');
+  GlobalKey keyFromUploadedImageCard = new GlobalKey();
 
   String? profileImageUrl;
 
@@ -117,24 +117,41 @@ class _TabProfileViewState extends State<TabProfileView> {
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  usersModel.userUploads.length
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.0),
-                                                ),
-                                                Text('Publicações'),
-                                              ],
+                                          InkWell(
+                                            onTap: () {
+                                              final contextFromKey =
+                                                  keyFromUploadedImageCard
+                                                      .currentContext;
+                                              if (contextFromKey != null) {
+                                                Scrollable.ensureVisible(
+                                                  contextFromKey,
+                                                  duration: const Duration(
+                                                      milliseconds: 400),
+                                                  curve: Curves.easeInOut,
+                                                );
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    usersModel
+                                                        .userUploads.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  Text('Publicações'),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           Spacer(),
@@ -270,6 +287,7 @@ class _TabProfileViewState extends State<TabProfileView> {
                     ];
                   },
                   body: Padding(
+                    key: keyFromUploadedImageCard,
                     padding: const EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
                     child: Card(
                       elevation: 10.0,
