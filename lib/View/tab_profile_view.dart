@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/tab_profile_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
+import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
 
 class TabProfileView extends StatefulWidget {
@@ -143,45 +144,57 @@ class _TabProfileViewState extends State<TabProfileView> {
                                             ),
                                           ),
                                           Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  usersModel.followedBy.length
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.0),
-                                                ),
-                                                Text('Seguidores'),
-                                              ],
+                                          InkWell(
+                                            onTap: () {
+                                              navigateToFollowView(0);
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    usersModel.followedBy.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  Text('Seguidores'),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  usersModel.followerOf.length
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.0),
-                                                ),
-                                                Text('Seguindo'),
-                                              ],
+                                          InkWell(
+                                            onTap: () {
+                                              navigateToFollowView(1);
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    usersModel.followerOf.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  Text('Seguindo'),
+                                                ],
+                                              ),
                                             ),
                                           )
                                         ],
@@ -391,5 +404,15 @@ class _TabProfileViewState extends State<TabProfileView> {
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  void navigateToFollowView(int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FollowView(
+                  initialIndex: index,
+                  actualProfileData: usersModel,
+                )));
   }
 }
