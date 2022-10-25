@@ -10,6 +10,7 @@ class UploadsModel {
   Timestamp uploadDateTime;
   String uploadStorageReference = '';
   String uploaderKey;
+  String downloadedImageURL = '';
 
   UploadsModel(this.description, this.uploadDateTime, this.uploaderKey);
 
@@ -25,5 +26,36 @@ class UploadsModel {
           uploadStorageReference,
       FIRESTORE_DATABASE_UPLOADS_UPLOADER_KEY: uploaderKey
     };
+  }
+
+  void setUserModelWith(Map<String, dynamic>? uploadModelMap) {
+    if (uploadModelMap != null) {
+      this.keyFromUpload = uploadModelMap[FIRESTORE_DATABASE_UPLOADS_KEY];
+
+      this.commentKeys =
+          (uploadModelMap[FIRESTORE_DATABASE_UPLOADS_COMMENT_KEYS] as List)
+              .map((item) => item as String)
+              .toList();
+
+      this.description = uploadModelMap[FIRESTORE_DATABASE_UPLOADS_DESCRIPTION];
+
+      this.likedBy =
+          (uploadModelMap[FIRESTORE_DATABASE_UPLOADS_LIKED_BY] as List)
+              .map((item) => item as String)
+              .toList();
+
+      this.savedBy =
+          (uploadModelMap[FIRESTORE_DATABASE_UPLOADS_SAVED_BY] as List)
+              .map((item) => item as String)
+              .toList();
+
+      this.uploadDateTime =
+          uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_DATE_TIME];
+      this.uploadStorageReference =
+          uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_STORAGE_REFERENCE];
+
+      this.uploaderKey =
+          uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOADER_KEY];
+    }
   }
 }

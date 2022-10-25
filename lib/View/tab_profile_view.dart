@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/tab_profile_controller.dart';
+import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
@@ -309,22 +310,36 @@ class _TabProfileViewState extends State<TabProfileView> {
                           Expanded(
                             child: TabBarView(
                               children: [
-                                GridView.count(
-                                  padding: EdgeInsets.zero,
-                                  crossAxisCount: 3,
-                                  children: Colors.primaries.map((color) {
-                                    return Container(
-                                        color: color, height: 150.0);
-                                  }).toList(),
-                                ),
-                                GridView.count(
-                                  padding: EdgeInsets.zero,
-                                  crossAxisCount: 3,
-                                  children: Colors.primaries.map((color) {
-                                    return Container(
-                                        color: color, height: 150.0);
-                                  }).toList(),
-                                )
+                                FutureBuilder(
+                                    future: getUploadsFromUserBy(
+                                        usersModel.userUploads),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState !=
+                                              ConnectionState.done ||
+                                          snapshot.data == null) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      List<UploadsModel> profileUploads =
+                                          snapshot.data as List<UploadsModel>;
+                                      return showOnGrid(profileUploads);
+                                    }),
+                                FutureBuilder(
+                                    future: getUploadsFromUserBy(
+                                        usersModel.savedPosts),
+                                    builder: (context, snapshot01) {
+                                      if (snapshot01.connectionState !=
+                                              ConnectionState.done ||
+                                          snapshot01.data == null) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      List<UploadsModel> profileUploads =
+                                          snapshot01.data as List<UploadsModel>;
+                                      return showOnGrid(profileUploads);
+                                    }),
                               ],
                             ),
                           ),
@@ -415,4 +430,56 @@ class _TabProfileViewState extends State<TabProfileView> {
                   actualProfileData: usersModel,
                 )));
   }
+
+  Widget showOnGrid(List<UploadsModel> uploads) {
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 2.0,
+        mainAxisSpacing: 2.0,
+      ),
+      itemCount: uploads.length,
+      itemBuilder: (context, index) {
+        uploads
+            .sort((m1, m2) => m2.uploadDateTime.compareTo(m1.uploadDateTime));
+        if (index < uploads.length) {
+          return GestureDetector(
+            child: SizedBox(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fitWidth,
+                    alignment: FractionalOffset.center,
+                    image: NetworkImage(
+                      uploads[index].downloadedImageURL,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              //TODO: Enviar para a tela de feed do perfil, aquela lista scrollavel
+              //que exibe todas as fotos da pessoa
+            },
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  Future<List<UploadsModel>> getUploadsFromUserBy(List<String> uploads) async {
+    return await _tabProfileController.getUploadsBy(uploads);
+  }
 }
+/**
+ * return GridView.count(
+      padding: EdgeInsets.zero,
+      crossAxisCount: 3,
+      children: Colors.primaries.map((color) {
+        return Container(color: color, height: 150.0);
+      }).toList(),
+    );
+ */

@@ -120,4 +120,37 @@ class FirebaseDatabaseController {
 
     instance.set(upload.getMapFromThisModel());
   }
+
+  Future<List<UploadsModel>> getUploadsAndDonwloadUrl(
+      List<String> listOfKeys) async {
+    List<UploadsModel> listOfUploads = [];
+
+    for (String uploadKey in listOfKeys) {
+      await FirebaseFirestore.instance
+          .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+          .get()
+          .then((allUploads) async {
+        for (final uploadDataFromDatabase in allUploads.docs) {
+          if (uploadKey == uploadDataFromDatabase.id) {
+            UploadsModel upload = UploadsModel('', Timestamp.now(), '');
+            upload.setUserModelWith(uploadDataFromDatabase.data());
+            await getDownloadUrlFrom(upload.uploadStorageReference)
+                .then((downloadUrl) {
+              upload.downloadedImageURL = downloadUrl.toString();
+            });
+            listOfUploads.add(upload);
+          }
+        }
+      });
+    }
+
+    return listOfUploads;
+  }
+
+  Future<String> getDownloadUrlFrom(String storageReference) async {
+    return await FirebaseStorage.instance
+        .ref()
+        .child(storageReference)
+        .getDownloadURL();
+  }
 }
