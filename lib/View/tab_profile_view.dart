@@ -473,10 +473,13 @@ class _TabProfileViewState extends State<TabProfileView> {
   }
 
   void moveToProfileEditingView() {
+    //TODO:Recarregar o usuario ao entrar na tela de edição
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileEditingView(),
+        builder: (context) => ProfileEditingView(
+          userModel: usersModel,
+        ),
       ),
     );
   }
