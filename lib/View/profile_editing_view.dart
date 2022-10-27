@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         setFieldsWithLoggedUser();
       },
@@ -65,7 +66,7 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: returnAndUpdateProfile,
+              onPressed: hasUserDataChage() ? updateProfileAndReturn : null,
               icon: Icon(Icons.check),
             )
           ],
@@ -118,6 +119,9 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                             if (value!.isEmpty) return 'Insira um nome';
                           },
                           controller: fullnameController,
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
                           decoration: InputDecoration(
                             labelText: 'Nome Completo',
                           ),
@@ -131,6 +135,9 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                               return 'Insira um nome de usuario';
                           },
                           controller: usernameController,
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
                           decoration: InputDecoration(
                             labelText: 'Nome de Usuario',
                           ),
@@ -140,7 +147,10 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                         padding: EdgeInsets.all(8.0),
                         child: TextField(
                           controller: genereController,
-                          //Feminino/Masculino/Personalizado/Não informar
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
+                          //TODO:Feminino/Masculino/Personalizado/Não informar
                           decoration: InputDecoration(
                             labelText: 'Genero',
                           ),
@@ -150,6 +160,9 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                         padding: EdgeInsets.all(8.0),
                         child: TextField(
                           controller: bioController,
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
                           decoration: InputDecoration(
                             labelText: 'Bio',
                           ),
@@ -159,6 +172,9 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                         padding: EdgeInsets.all(8.0),
                         child: TextField(
                           controller: linksController,
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
                           decoration: InputDecoration(
                             labelText: 'Links',
                           ),
@@ -182,9 +198,11 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                           },
                           readOnly: true,
                           controller: birthController,
+                          onChanged: ((value) {
+                            setState(() {});
+                          }),
                           decoration: InputDecoration(
-                            labelText:
-                                'Data de Nascimento', //Exibir sim ou não e escolher data caso sim
+                            labelText: 'Data de Nascimento',
                           ),
                         ),
                       ),
@@ -218,18 +236,30 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
     }
   }
 
-  void returnAndUpdateProfile() {
+  void updateProfileAndReturn() {
+    UsersModel updateOfUser = widget.userModel;
+    updateOfUser.fullname = fullnameController.text;
+    updateOfUser.username = usernameController.text;
+    updateOfUser.genere = genereController.text;
+    updateOfUser.bio = bioController.text;
+    updateOfUser.myLinks = linksController.text;
+    updateOfUser.birthDate = Timestamp.fromDate(birth);
+
+    updateProfileImage();
+
+    updadeProfileData(updateOfUser);
+
     Navigator.pop(context);
   }
-  /**
-   * DecorationImage(
-                    fit: BoxFit.fitWidth,
-                    alignment: FractionalOffset.center,
-                    image: NetworkImage(
-                      uploads[index].downloadedImageURL,
-                    ),
-                  ),
-   */
+
+  Future<void> updateProfileImage() async {
+    await _profileEditingController.updateProfileImage(
+        _selectedFilePath.toString(), widget.userModel.profileImageReference);
+  }
+
+  Future<void> updadeProfileData(UsersModel updateUser) async {
+    await _profileEditingController.updateProfileData(updateUser);
+  }
 
   Widget showCurrentProfileImage() {
     return FutureBuilder(
@@ -299,5 +329,17 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
         mounths[birth.month - 1] +
         " de " +
         birth.year.toString();
+  }
+
+  bool hasUserDataChage() {
+    if (_selectedFilePath != null) return true;
+    if (fullnameController.text != widget.userModel.fullname) return true;
+    if (usernameController.text != widget.userModel.username) return true;
+    if (genereController.text != widget.userModel.genere) return true;
+    if (bioController.text != widget.userModel.bio) return true;
+    if (linksController.text != widget.userModel.myLinks) return true;
+    if (birth != widget.userModel.birthDate.toDate()) return true;
+
+    return false;
   }
 }

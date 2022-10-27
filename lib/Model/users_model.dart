@@ -47,6 +47,19 @@ class UsersModel {
     };
   }
 
+  Map<String, dynamic> getMapForUpdadeProfile() {
+    return {
+      FIRESTORE_DATABASE_USERS_DOCUMENT_KEY: keyFromUser,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_EMAIL: email,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME: username,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FULLNAME: fullname,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_BIO: bio,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_BIRTH_DATE: birthDate,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_GENERE: genere,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_MY_LINKS: myLinks,
+    };
+  }
+
   void setUserModelWith(Map<String, dynamic>? userModelMap) {
     if (userModelMap != null) {
       keyFromUser = userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY];
