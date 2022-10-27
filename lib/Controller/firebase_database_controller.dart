@@ -165,4 +165,48 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([keyFromUpload])
     });
   }
+
+  Future<void> updadeProfileImage(
+      String newProfileImage, String profileImageReference) async {
+    File newImage = File(newProfileImage);
+
+    if (profileImageReference != getStandardProfileImageReference()) {
+      profileImageReference = FIREBASE_STORAGE_USERS +
+          getLoggedUserId().toString() +
+          FIREBASE_STORAGE_USERS_PROFILE +
+          'profile_image';
+
+      setNewProfileImageReferenceToUser(profileImageReference);
+    }
+
+    await FirebaseStorage.instance
+        .ref()
+        .child(profileImageReference)
+        .putFile(newImage);
+  }
+
+  String getStandardProfileImageReference() {
+    return FIREBASE_STORAGE_USERS +
+        getLoggedUserId().toString() +
+        FIREBASE_STORAGE_USERS_PROFILE +
+        'profile_image';
+  }
+
+  Future<void> setNewProfileImageReferenceToUser(
+      String profileImageReference) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_REFERENCE:
+          profileImageReference
+    });
+  }
+
+  Future<void> updadeProfileData(UsersModel updadeUser) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(updadeUser.keyFromUser)
+        .update(updadeUser.getMapForUpdadeProfile());
+  }
 }

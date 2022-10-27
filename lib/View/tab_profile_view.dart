@@ -8,6 +8,7 @@ import 'package:instacopy2/Controller/tab_profile_controller.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/follow_view.dart';
+import 'package:instacopy2/View/profile_editing_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
 
 class TabProfileView extends StatefulWidget {
@@ -24,11 +25,6 @@ class TabProfileView extends StatefulWidget {
 class _TabProfileViewState extends State<TabProfileView> {
   ApplicationController _applicationController = ApplicationController();
   TabProfileController _tabProfileController = TabProfileController();
-  String numberOfPosts = '11';
-  String numberOfFollowers = '283';
-  String numberAreFollowing = '733';
-  String fullname = 'Gabriel de Moura Silva';
-  String bio = 'asdasd\ndasdasd\ndasdasd\ndasdasdas';
 
   UsersModel usersModel = UsersModel(keyFromUser: '');
   GlobalKey keyFromUploadedImageCard = new GlobalKey();
@@ -235,7 +231,9 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                         const EdgeInsets.all(
                                                             4.0),
                                                     child: ElevatedButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        moveToProfileEditingView();
+                                                      },
                                                       child: Text(
                                                         'Editar perfil',
                                                         style: TextStyle(
@@ -473,13 +471,16 @@ class _TabProfileViewState extends State<TabProfileView> {
   Future<List<UploadsModel>> getUploadsFromUserBy(List<String> uploads) async {
     return await _tabProfileController.getUploadsBy(uploads);
   }
-}
-/**
- * return GridView.count(
-      padding: EdgeInsets.zero,
-      crossAxisCount: 3,
-      children: Colors.primaries.map((color) {
-        return Container(color: color, height: 150.0);
-      }).toList(),
+
+  void moveToProfileEditingView() {
+    //TODO:Recarregar o usuario ao entrar na tela de edição
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileEditingView(
+          userModel: usersModel,
+        ),
+      ),
     );
- */
+  }
+}
