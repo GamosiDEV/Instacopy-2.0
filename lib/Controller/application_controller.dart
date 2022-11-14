@@ -35,7 +35,7 @@ class ApplicationController {
             builder: (context) => UploadImageView(loggedUserId: userId)));
 
     if (hasUploaded != null && hasUploaded) {
-      showSnackBar('Imagem postada com sucesso', context);
+      showSnackBar('Sua imagem esta sendo enviada!', context);
     }
   }
 }
