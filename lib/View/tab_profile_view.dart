@@ -376,18 +376,9 @@ class _TabProfileViewState extends State<TabProfileView> {
   }
 
   Widget setProfileImageFrom(String url) {
-    return FadeInImage(
-      image: url == ''
-          ? placeHolderProfileImage()
-          : NetworkImage(
-              url,
-            ),
-      placeholder: placeHolderProfileImage(),
-    );
-  }
-
-  ImageProvider placeHolderProfileImage() {
-    return const AssetImage('assets/images/profile.jpg');
+    return url == ''
+        ? Image.asset('assets/images/profile.jpg')
+        : Image.network(url);
   }
 
   bool hasTheLoggedUserProfile() {
@@ -481,6 +472,8 @@ class _TabProfileViewState extends State<TabProfileView> {
           userModel: usersModel,
         ),
       ),
-    );
+    ).then((value) {
+      setState(() {});
+    });
   }
 }

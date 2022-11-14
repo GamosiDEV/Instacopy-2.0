@@ -253,8 +253,10 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
   }
 
   Future<void> updateProfileImage() async {
-    await _profileEditingController.updateProfileImage(
-        _selectedFilePath.toString(), widget.userModel.profileImageReference);
+    if (_selectedFilePath != null) {
+      await _profileEditingController.updateProfileImage(
+          _selectedFilePath.toString(), widget.userModel.profileImageReference);
+    }
   }
 
   Future<void> updadeProfileData(UsersModel updateUser) async {
