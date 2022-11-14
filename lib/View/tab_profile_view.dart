@@ -463,17 +463,20 @@ class _TabProfileViewState extends State<TabProfileView> {
     return await _tabProfileController.getUploadsBy(uploads);
   }
 
-  void moveToProfileEditingView() {
-    //TODO:Recarregar o usuario ao entrar na tela de edição
-    Navigator.push(
+  void moveToProfileEditingView() async {
+    bool? hasUpdated = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ProfileEditingView(
           userModel: usersModel,
         ),
       ),
-    ).then((value) {
+    );
+
+    if (hasUpdated != null && hasUpdated) {
+      ApplicationController.showSnackBar(
+          'Perfil foi atualizado com sucesso', context);
       setState(() {});
-    });
+    }
   }
 }

@@ -249,7 +249,7 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
 
     updadeProfileData(updateOfUser);
 
-    Navigator.pop(context);
+    Navigator.pop(context, true);
   }
 
   Future<void> updateProfileImage() async {

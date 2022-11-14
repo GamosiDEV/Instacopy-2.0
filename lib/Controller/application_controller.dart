@@ -29,9 +29,13 @@ class ApplicationController {
   }
 
   Future<void> toUploadImageView(BuildContext context, userId) async {
-    Navigator.push(
+    bool? hasUploaded = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => UploadImageView(loggedUserId: userId)));
+
+    if (hasUploaded != null && hasUploaded) {
+      showSnackBar('Imagem postada com sucesso', context);
+    }
   }
 }

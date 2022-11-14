@@ -34,7 +34,7 @@ class _UploadImageViewState extends State<UploadImageView> {
         leading: IconButton(
             icon: Icon(Icons.close),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, false);
             }),
         actions: [
           IconButton(
@@ -127,7 +127,7 @@ class _UploadImageViewState extends State<UploadImageView> {
   }
 
   void popUploadImageView() {
-    Navigator.pop(context);
+    Navigator.pop(context, true);
   }
 
   Future<void> selectImageFromHardwareStorage() async {
