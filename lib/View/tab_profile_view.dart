@@ -481,6 +481,8 @@ class _TabProfileViewState extends State<TabProfileView> {
           userModel: usersModel,
         ),
       ),
-    );
+    ).then((value) {
+      setState(() {});
+    });
   }
 }
