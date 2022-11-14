@@ -28,7 +28,7 @@ class ApplicationController {
         context, MaterialPageRoute(builder: (context) => const LoginView()));
   }
 
-  void toUploadImageView(BuildContext context, userId) {
+  Future<void> toUploadImageView(BuildContext context, userId) async {
     Navigator.push(
         context,
         MaterialPageRoute(
