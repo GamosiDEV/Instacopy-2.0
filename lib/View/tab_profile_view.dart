@@ -9,6 +9,7 @@ import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/profile_editing_view.dart';
+import 'package:instacopy2/View/upload_card_feed_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
 
 class TabProfileView extends StatefulWidget {
@@ -449,6 +450,14 @@ class _TabProfileViewState extends State<TabProfileView> {
             ),
             behavior: HitTestBehavior.opaque,
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UploadCardFeedView(
+                    upload: uploads[index],
+                  ),
+                ),
+              );
               //TODO: Enviar para a tela de feed do perfil, aquela lista scrollavel
               //que exibe todas as fotos da pessoa
             },
