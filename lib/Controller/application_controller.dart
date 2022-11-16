@@ -38,4 +38,10 @@ class ApplicationController {
       showSnackBar('Sua imagem esta sendo enviada!', context);
     }
   }
+
+  Widget setProfileImageFrom(String url) {
+    return url == ''
+        ? Image.asset('assets/images/profile.jpg')
+        : Image.network(url);
+  }
 }

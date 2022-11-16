@@ -209,4 +209,8 @@ class FirebaseDatabaseController {
         .doc(updadeUser.keyFromUser)
         .update(updadeUser.getMapForUpdadeProfile());
   }
+
+  Future<String> getImageUrlBy(String reference) async {
+    return await FirebaseStorage.instance.ref(reference).getDownloadURL();
+  }
 }

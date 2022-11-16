@@ -88,9 +88,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                               child: SizedBox.fromSize(
                                                 size: Size.fromRadius(42),
                                                 child: profileImageUrl != null
-                                                    ? setProfileImageFrom(
-                                                        profileImageUrl
-                                                            .toString())
+                                                    ? ApplicationController()
+                                                        .setProfileImageFrom(
+                                                            profileImageUrl
+                                                                .toString())
                                                     : FutureBuilder(
                                                         future:
                                                             getProfileImageUrl(),
@@ -107,9 +108,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                                 snapshotFromProfileImage
                                                                         .data
                                                                     as String;
-                                                            return setProfileImageFrom(
-                                                                profileImageUrl
-                                                                    .toString());
+                                                            return ApplicationController()
+                                                                .setProfileImageFrom(
+                                                                    profileImageUrl
+                                                                        .toString());
                                                           }
                                                           return CircularProgressIndicator();
                                                         }),
@@ -376,12 +378,6 @@ class _TabProfileViewState extends State<TabProfileView> {
         .getProfileImageUrlFrom(usersModel.profileImageReference);
   }
 
-  Widget setProfileImageFrom(String url) {
-    return url == ''
-        ? Image.asset('assets/images/profile.jpg')
-        : Image.network(url);
-  }
-
   bool hasTheLoggedUserProfile() {
     if (widget.loggedUserId == widget.profileUserId) {
       return true;
@@ -455,6 +451,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                 MaterialPageRoute(
                   builder: (context) => UploadCardFeedView(
                     upload: uploads[index],
+                    profileUser: usersModel,
+                    userProfileImage: profileImageUrl ?? '',
                   ),
                 ),
               );
