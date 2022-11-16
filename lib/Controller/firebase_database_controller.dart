@@ -97,11 +97,11 @@ class FirebaseDatabaseController {
   }
 
   Future<String> sendImageToStorageAndGetReference(
-      File selectedFile, String uploaderId) async {
+      File selectedFile, UploadsModel upload) async {
     String newImageReference = FIREBASE_STORAGE_USERS +
-        uploaderId +
+        upload.uploaderKey +
         FIREBASE_STORAGE_USERS_UPLOADS +
-        basename(selectedFile.path);
+        upload.keyFromUpload;
 
     await FirebaseStorage.instance
         .ref()
@@ -111,12 +111,18 @@ class FirebaseDatabaseController {
     return newImageReference;
   }
 
-  void setIdToUploadAndSendToDatabase(UploadsModel upload) async {
+  void setIdToUploadAndSendToDatabase(
+      UploadsModel upload, File selectedFile) async {
     final instance = FirebaseFirestore.instance
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc();
 
     upload.keyFromUpload = instance.id;
+
+    await sendImageToStorageAndGetReference(selectedFile, upload)
+        .then((newImageReference) {
+      upload.uploadStorageReference = newImageReference;
+    });
 
     instance.set(upload.getMapFromThisModel());
 
