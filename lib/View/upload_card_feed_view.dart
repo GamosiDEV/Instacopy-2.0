@@ -10,15 +10,19 @@ import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 
 class UploadCardFeedView extends StatefulWidget {
-  UploadsModel upload;
-  UsersModel profileUser;
-  String userProfileImage;
+  UploadsModel? upload;
+  UsersModel? profileUser;
+  String? userProfileImage;
+  String uploadKey;
+  String userUploaderKey;
 
   UploadCardFeedView(
       {Key? key,
-      required this.upload,
-      required this.profileUser,
-      required this.userProfileImage})
+      this.upload,
+      this.profileUser,
+      this.userProfileImage,
+      required this.uploadKey,
+      required this.userUploaderKey})
       : super(key: key);
 
   @override
@@ -29,163 +33,238 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   UploadCardFeedController _uploadCardFeedController =
       UploadCardFeedController();
 
+  bool showMoreDescription = false;
+  UploadsModel? upload;
+  UsersModel? profileUser;
+  String? userProfileImage;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      upload = widget.upload;
+      profileUser = widget.profileUser;
+      userProfileImage = widget.userProfileImage;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child: Card(
-        elevation: 10.0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      sendToProfile();
-                    },
-                    child: ClipOval(
-                      child: SizedBox.fromSize(
-                        size: Size.fromRadius(18),
-                        child: ApplicationController()
-                            .setProfileImageFrom(widget.userProfileImage),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      sendToProfile();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0.0),
-                      child: Text(
-                        widget.profileUser.username,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    alignment: Alignment.centerRight,
-                    icon: Icon(Icons.more_vert),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
-              child: FutureBuilder(
-                future: getUploadImageUrl(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    String imageUrl = snapshot.data.toString();
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.65,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fitWidth,
-                              alignment: FractionalOffset.center,
-                              image: NetworkImage(imageUrl))),
-                    );
-                  }
-                  return Container(
-                      alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height * 0.65,
-                      child: const CircularProgressIndicator());
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: IconButton(
-                      onPressed: () {
-                        sendlikeToUpload();
-                      },
-                      icon: Icon(
-                        Icons.star_border,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: IconButton(
-                      onPressed: () {
-                        saveUpload();
-                      },
-                      icon: Icon(
-                        Icons.save_outlined,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: IconButton(
-                      onPressed: () {
-                        shareUpload();
-                      },
-                      icon: Icon(
-                        Icons.send,
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: RichText(
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(
-                  text: widget.profileUser.username + '  ',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      sendToProfile();
-                    },
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                        text: widget.upload.description,
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black)),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-              child: RichText(
-                text: TextSpan(
-                    text: 'Ver todos os comentários',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black45),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        showAllCommentaries();
-                      }),
-              ),
-            ),
-          ],
+      alignment: Alignment.center,
+      child: FutureBuilder(
+          future: profileUser != null ? null : getProfileUserWithKey(),
+          builder: (context, profileSnapshot) {
+            if (profileUser != null) {
+              return showFutureCardWithUploadUserInformation(context);
+            } else if (profileSnapshot != null &&
+                profileSnapshot.connectionState == ConnectionState.done) {
+              profileUser = profileSnapshot.data as UsersModel;
+              return showFutureCardWithUploadUserInformation(context);
+            }
+            return Container(child: CircularProgressIndicator());
+          }),
+    );
+  }
+
+  Widget showFutureCardWithUploadUserInformation(BuildContext context) {
+    return Card(
+      elevation: 10.0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
         ),
       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0),
+            child: Row(
+              children: [
+                FutureBuilder(
+                    future: userProfileImage != null
+                        ? null
+                        : getProfileImageWithReference(),
+                    builder: (context, profileImageSnapshot) {
+                      if (userProfileImage != null) {
+                        return showProfileImageInFeedCard(context);
+                      } else if (profileImageSnapshot != null &&
+                          profileImageSnapshot.connectionState ==
+                              ConnectionState.done) {
+                        userProfileImage = profileImageSnapshot.data as String;
+                        return showProfileImageInFeedCard(context);
+                      }
+                      return Image.asset('assets/images/profile.jpg');
+                    }),
+                InkWell(
+                  onTap: () {
+                    sendToProfile();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0.0),
+                    child: Text(
+                      profileUser!.username,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {
+                    //TODO: mostrar opções de ação para este card
+                  },
+                  alignment: Alignment.centerRight,
+                  icon: Icon(Icons.more_vert),
+                ),
+              ],
+            ),
+          ),
+          FutureBuilder(
+            future: upload != null ? null : getUploadDataWithUploadKey(),
+            builder: (context, uploadSnapshot) {
+              if (upload != null) {
+                return showUploadDataInCard(context);
+              } else if (uploadSnapshot != null &&
+                  uploadSnapshot.connectionState == ConnectionState.done) {
+                upload = uploadSnapshot.data as UploadsModel;
+                return showUploadDataInCard(context);
+              }
+              return Container(child: CircularProgressIndicator());
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showProfileImageInFeedCard(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        sendToProfile();
+      },
+      child: ClipOval(
+        child: SizedBox.fromSize(
+          size: Size.fromRadius(18),
+          child: ApplicationController()
+              .setProfileImageFrom(userProfileImage.toString()),
+        ),
+      ),
+    );
+  }
+
+  Widget showUploadDataInCard(BuildContext context) {
+    return Column(
+      children: [
+        FutureBuilder(
+          future: getUploadImageUrl(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              String imageUrl = snapshot.data.toString();
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.65,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fitWidth,
+                        alignment: FractionalOffset.center,
+                        image: NetworkImage(imageUrl))),
+              );
+            }
+            return Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: Container(child: CircularProgressIndicator()));
+          },
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                sendlikeToUpload();
+              },
+              icon: Icon(
+                Icons.star_border,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                saveUpload();
+              },
+              icon: Icon(
+                Icons.save_outlined,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                shareUpload();
+              },
+              icon: Icon(
+                Icons.send,
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            upload!.likedBy.length.toString() + " curtidas",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          child: Expanded(
+            child: RichText(
+              maxLines: showMoreDescription ? 50 : 3,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              text: TextSpan(
+                text: profileUser!.username + '  ',
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    sendToProfile();
+                  },
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                      text: upload!.description,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          changeShowMoreDescriptionState();
+                        }),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          child: RichText(
+            text: TextSpan(
+                text: 'Ver todos os comentários',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black45),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    showAllCommentaries();
+                  }),
+          ),
+        ),
+      ],
     );
   }
 
@@ -198,7 +277,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
 
   Future<String> getUploadImageUrl() async {
     return await _uploadCardFeedController
-        .getImageUrlBy(widget.upload.uploadStorageReference);
+        .getImageUrlBy(upload!.uploadStorageReference);
   }
 
   void sendlikeToUpload() {
@@ -227,5 +306,29 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
     print('==============');
     print('===COMMENTS===');
     print('==============');
+  }
+
+  void changeShowMoreDescriptionState() {
+    setState(() {
+      if (showMoreDescription) {
+        showMoreDescription = false;
+      } else {
+        showMoreDescription = true;
+      }
+    });
+  }
+
+  Future<UsersModel> getProfileUserWithKey() async {
+    return await _uploadCardFeedController
+        .getProfileUserWith(widget.userUploaderKey);
+  }
+
+  Future<String> getProfileImageWithReference() async {
+    return await _uploadCardFeedController
+        .getProfileImageWith(profileUser!.profileImageReference);
+  }
+
+  Future<UploadsModel> getUploadDataWithUploadKey() async {
+    return await _uploadCardFeedController.getUploadDataWith(widget.uploadKey);
   }
 }

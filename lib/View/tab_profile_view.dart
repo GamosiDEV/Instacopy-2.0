@@ -453,6 +453,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                     upload: uploads[index],
                     profileUser: usersModel,
                     userProfileImage: profileImageUrl ?? '',
+                    userUploaderKey: usersModel.keyFromUser,
+                    uploadKey: uploads[index].keyFromUpload,
                   ),
                 ),
               );
