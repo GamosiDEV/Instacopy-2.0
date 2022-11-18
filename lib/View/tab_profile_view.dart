@@ -11,6 +11,7 @@ import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/profile_editing_view.dart';
 import 'package:instacopy2/View/upload_card_feed_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
+import 'package:instacopy2/View/user_upload_feed_view.dart';
 
 class TabProfileView extends StatefulWidget {
   final String? profileUserId;
@@ -446,15 +447,19 @@ class _TabProfileViewState extends State<TabProfileView> {
             ),
             behavior: HitTestBehavior.opaque,
             onTap: () {
+              print('===|LOGGED USER:' +
+                  widget.loggedUserId.toString() +
+                  ' |===');
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => UploadCardFeedView(
-                    upload: uploads[index],
+                  builder: (context) => UserUploadFeedView(
+                    listOfUploads: uploads,
                     profileUser: usersModel,
                     userProfileImage: profileImageUrl ?? '',
                     userUploaderKey: usersModel.keyFromUser,
-                    uploadKey: uploads[index].keyFromUpload,
+                    loggedUser: widget.loggedUserId.toString(),
+                    indexOfUpload: index,
                   ),
                 ),
               );

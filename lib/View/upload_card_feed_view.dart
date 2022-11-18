@@ -15,6 +15,7 @@ class UploadCardFeedView extends StatefulWidget {
   String? userProfileImage;
   String uploadKey;
   String userUploaderKey;
+  String loggedUserKey;
 
   UploadCardFeedView(
       {Key? key,
@@ -22,7 +23,8 @@ class UploadCardFeedView extends StatefulWidget {
       this.profileUser,
       this.userProfileImage,
       required this.uploadKey,
-      required this.userUploaderKey})
+      required this.userUploaderKey,
+      required this.loggedUserKey})
       : super(key: key);
 
   @override
@@ -64,7 +66,14 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
               profileUser = profileSnapshot.data as UsersModel;
               return showFutureCardWithUploadUserInformation(context);
             }
-            return Container(child: CircularProgressIndicator());
+            return Card(
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.65,
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              ),
+            );
           }),
     );
   }
@@ -85,30 +94,39 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
             padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0),
             child: Row(
               children: [
-                FutureBuilder(
-                    future: userProfileImage != null
-                        ? null
-                        : getProfileImageWithReference(),
-                    builder: (context, profileImageSnapshot) {
-                      if (userProfileImage != null) {
-                        return showProfileImageInFeedCard(context);
-                      } else if (profileImageSnapshot != null &&
-                          profileImageSnapshot.connectionState ==
-                              ConnectionState.done) {
-                        userProfileImage = profileImageSnapshot.data as String;
-                        return showProfileImageInFeedCard(context);
-                      }
-                      return Image.asset('assets/images/profile.jpg');
-                    }),
-                InkWell(
-                  onTap: () {
-                    sendToProfile();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0.0),
-                    child: Text(
-                      profileUser!.username,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                Container(
+                  height: 32,
+                  alignment: Alignment.center,
+                  child: FutureBuilder(
+                      future: userProfileImage != null
+                          ? null
+                          : getProfileImageWithReference(),
+                      builder: (context, profileImageSnapshot) {
+                        if (userProfileImage != null) {
+                          return showProfileImageInFeedCard(context);
+                        } else if (profileImageSnapshot != null &&
+                            profileImageSnapshot.connectionState ==
+                                ConnectionState.done) {
+                          userProfileImage =
+                              profileImageSnapshot.data as String;
+                          return showProfileImageInFeedCard(context);
+                        }
+                        return Image.asset('assets/images/profile.jpg');
+                      }),
+                ),
+                Container(
+                  height: 32,
+                  alignment: Alignment.center,
+                  child: InkWell(
+                    onTap: () {
+                      sendToProfile();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0.0),
+                      child: Text(
+                        profileUser!.username,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
@@ -133,7 +151,10 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
                 upload = uploadSnapshot.data as UploadsModel;
                 return showUploadDataInCard(context);
               }
-              return Container(child: CircularProgressIndicator());
+              return Container(
+                  alignment: Alignment.center,
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: CircularProgressIndicator());
             },
           ),
         ],
@@ -176,7 +197,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
             return Container(
                 alignment: Alignment.center,
                 height: MediaQuery.of(context).size.height * 0.65,
-                child: Container(child: CircularProgressIndicator()));
+                child: CircularProgressIndicator());
           },
         ),
         Row(
