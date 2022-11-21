@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/Controller/home_controller.dart';
 import 'package:instacopy2/Theme/app_colors.dart';
@@ -27,14 +28,14 @@ class _HomeFeedViewState extends State<HomeFeedView>
       body: Center(
         child: [
           TabFeedView(
-            loggedUserId: getLoggedUserId(),
+            loggedUserId: ApplicationController().getLoggedUserId(),
           ),
           TabSearchView(
-            loggedUserId: getLoggedUserId(),
+            loggedUserId: ApplicationController().getLoggedUserId(),
           ),
           TabProfileView(
-            profileUserId: getLoggedUserId(),
-            loggedUserId: getLoggedUserId(),
+            profileUserId: ApplicationController().getLoggedUserId(),
+            loggedUserId: ApplicationController().getLoggedUserId(),
           ),
         ].elementAt(_selectedIndex),
       ),
@@ -73,9 +74,5 @@ class _HomeFeedViewState extends State<HomeFeedView>
     setState(() {
       appBarTitle = newTitle;
     });
-  }
-
-  String? getLoggedUserId() {
-    return _homeController.getLoggedUserId();
   }
 }

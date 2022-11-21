@@ -44,4 +44,8 @@ class ApplicationController {
         ? Image.asset('assets/images/profile.jpg')
         : Image.network(url);
   }
+
+  String? getLoggedUserId() {
+    return _firebaseDatabaseController.getLoggedUserId();
+  }
 }

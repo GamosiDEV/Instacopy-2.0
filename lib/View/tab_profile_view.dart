@@ -45,12 +45,12 @@ class _TabProfileViewState extends State<TabProfileView> {
               appBar: AppBar(
                 title: Text(usersModel.username),
                 actions: [
-                  IconButton(
-                    onPressed: widget.profileUserId == widget.loggedUserId
-                        ? toUploadImageView
-                        : null,
-                    icon: Icon(Icons.add_a_photo),
-                  ),
+                  widget.profileUserId == widget.loggedUserId
+                      ? IconButton(
+                          onPressed: toUploadImageView,
+                          icon: Icon(Icons.add_a_photo),
+                        )
+                      : Container(),
                   IconButton(
                     onPressed: () => _applicationController.logout(context),
                     icon: Icon(Icons.logout),

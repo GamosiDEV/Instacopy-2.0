@@ -8,6 +8,8 @@ import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/upload_card_feed_controller.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
+import 'package:instacopy2/View/home_view.dart';
+import 'package:instacopy2/View/profile_view.dart';
 import 'package:share_plus/share_plus.dart';
 
 class UploadCardFeedView extends StatefulWidget {
@@ -293,10 +295,14 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void sendToProfile() {
-    //TODO:
-    print('==============');
-    print('==To Profile==');
-    print('==============');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileView(
+          profileUserId: widget.userUploaderKey,
+        ),
+      ),
+    );
   }
 
   Future<String> getUploadImageUrl() async {
@@ -319,10 +325,6 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void shareUpload() {
-    //TODO:
-    print('==============');
-    print('=====SHARE====');
-    print('==============');
     if (imageShareUrl != null) {
       Share.share(imageShareUrl.toString());
     }
