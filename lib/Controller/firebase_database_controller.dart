@@ -215,4 +215,16 @@ class FirebaseDatabaseController {
         .doc(updadeUser.keyFromUser)
         .update(updadeUser.getMapForUpdadeProfile());
   }
+
+  Future<String> getImageUrlBy(String reference) async {
+    return await FirebaseStorage.instance.ref(reference).getDownloadURL();
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUploadDataWith(
+      String uploadId) async {
+    return await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(uploadId)
+        .get();
+  }
 }

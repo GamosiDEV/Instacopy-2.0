@@ -9,7 +9,9 @@ import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/profile_editing_view.dart';
+import 'package:instacopy2/View/upload_card_feed_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
+import 'package:instacopy2/View/user_upload_feed_view.dart';
 
 class TabProfileView extends StatefulWidget {
   final String? profileUserId;
@@ -87,9 +89,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                               child: SizedBox.fromSize(
                                                 size: Size.fromRadius(42),
                                                 child: profileImageUrl != null
-                                                    ? setProfileImageFrom(
-                                                        profileImageUrl
-                                                            .toString())
+                                                    ? ApplicationController()
+                                                        .setProfileImageFrom(
+                                                            profileImageUrl
+                                                                .toString())
                                                     : FutureBuilder(
                                                         future:
                                                             getProfileImageUrl(),
@@ -106,9 +109,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                                 snapshotFromProfileImage
                                                                         .data
                                                                     as String;
-                                                            return setProfileImageFrom(
-                                                                profileImageUrl
-                                                                    .toString());
+                                                            return ApplicationController()
+                                                                .setProfileImageFrom(
+                                                                    profileImageUrl
+                                                                        .toString());
                                                           }
                                                           return CircularProgressIndicator();
                                                         }),
@@ -375,12 +379,6 @@ class _TabProfileViewState extends State<TabProfileView> {
         .getProfileImageUrlFrom(usersModel.profileImageReference);
   }
 
-  Widget setProfileImageFrom(String url) {
-    return url == ''
-        ? Image.asset('assets/images/profile.jpg')
-        : Image.network(url);
-  }
-
   bool hasTheLoggedUserProfile() {
     if (widget.loggedUserId == widget.profileUserId) {
       return true;
@@ -449,6 +447,22 @@ class _TabProfileViewState extends State<TabProfileView> {
             ),
             behavior: HitTestBehavior.opaque,
             onTap: () {
+              print('===|LOGGED USER:' +
+                  widget.loggedUserId.toString() +
+                  ' |===');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserUploadFeedView(
+                    listOfUploads: uploads,
+                    profileUser: usersModel,
+                    userProfileImage: profileImageUrl ?? '',
+                    userUploaderKey: usersModel.keyFromUser,
+                    loggedUser: widget.loggedUserId.toString(),
+                    indexOfUpload: index,
+                  ),
+                ),
+              );
               //TODO: Enviar para a tela de feed do perfil, aquela lista scrollavel
               //que exibe todas as fotos da pessoa
             },
