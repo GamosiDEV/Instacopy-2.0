@@ -8,6 +8,7 @@ import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/upload_card_feed_controller.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
+import 'package:share_plus/share_plus.dart';
 
 class UploadCardFeedView extends StatefulWidget {
   UploadsModel? upload;
@@ -39,6 +40,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   UploadsModel? upload;
   UsersModel? profileUser;
   String? userProfileImage;
+  String? imageShareUrl;
 
   @override
   void initState() {
@@ -185,6 +187,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               String imageUrl = snapshot.data.toString();
+              imageShareUrl = imageUrl;
               return Container(
                 height: MediaQuery.of(context).size.height * 0.65,
                 decoration: BoxDecoration(
@@ -320,6 +323,9 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
     print('==============');
     print('=====SHARE====');
     print('==============');
+    if (imageShareUrl != null) {
+      Share.share(imageShareUrl.toString());
+    }
   }
 
   void showAllCommentaries() {
