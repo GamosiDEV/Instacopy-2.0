@@ -209,19 +209,27 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
           children: [
             IconButton(
               onPressed: () {
-                sendlikeToUpload();
+                setLikeToUpload();
               },
-              icon: Icon(
-                Icons.star_border,
-              ),
+              icon: hasLiked()
+                  ? const Icon(
+                      Icons.star,
+                    )
+                  : const Icon(
+                      Icons.star_border,
+                    ),
             ),
             IconButton(
               onPressed: () {
-                saveUpload();
+                setSaveToUpload();
               },
-              icon: Icon(
-                Icons.save_outlined,
-              ),
+              icon: hasSaved()
+                  ? Icon(
+                      Icons.save_rounded,
+                    )
+                  : Icon(
+                      Icons.save_outlined,
+                    ),
             ),
             IconButton(
               onPressed: () {
@@ -310,18 +318,32 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
         .getImageUrlBy(upload!.uploadStorageReference);
   }
 
-  void sendlikeToUpload() {
-    //TODO:
-    print('==============');
-    print('=====LIKE=====');
-    print('==============');
+  void setLikeToUpload() {
+    setState(() {
+      if (hasLiked()) {
+        removeLikeToDatabase();
+        upload!.likedBy.remove(widget.loggedUserKey);
+      } else {
+        sendLikeToDatabase();
+        upload!.likedBy.add(widget.loggedUserKey);
+      }
+    });
   }
 
-  void saveUpload() {
+  void setSaveToUpload() {
     //TODO:
     print('==============');
     print('=====SAVE=====');
     print('==============');
+    setState(() {
+      if (hasSaved()) {
+        removeSaveToDatabase();
+        upload!.savedBy.remove(widget.loggedUserKey);
+      } else {
+        sendSaveToDatabase();
+        upload!.savedBy.add(widget.loggedUserKey);
+      }
+    });
   }
 
   void shareUpload() {
@@ -359,5 +381,43 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
 
   Future<UploadsModel> getUploadDataWithUploadKey() async {
     return await _uploadCardFeedController.getUploadDataWith(widget.uploadKey);
+  }
+
+  bool hasLiked() {
+    for (String keyFromUser in upload!.likedBy) {
+      if (keyFromUser == widget.loggedUserKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool hasSaved() {
+    for (String keyFromUser in upload!.savedBy) {
+      if (keyFromUser == widget.loggedUserKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> sendLikeToDatabase() async {
+    await _uploadCardFeedController.sendLikeStatusToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> removeLikeToDatabase() async {
+    await _uploadCardFeedController.removeLikeToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> sendSaveToDatabase() async {
+    await _uploadCardFeedController.sendSaveToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> removeSaveToDatabase() async {
+    await _uploadCardFeedController.removeSaveToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
   }
 }

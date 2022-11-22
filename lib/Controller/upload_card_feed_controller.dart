@@ -40,4 +40,28 @@ class UploadCardFeedController {
       return upload;
     });
   }
+
+  Future<void> sendLikeStatusToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.sendLikeStatusToDatabase(
+        uploadKey, likedByUserKey);
+  }
+
+  Future<void> removeLikeToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.removeLikeToDatabase(
+        uploadKey, likedByUserKey);
+  }
+
+  Future<void> sendSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.sendSaveToDatabase(
+        uploadKey, likedByUserKey);
+  }
+
+  Future<void> removeSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.removeSaveToDatabase(
+        uploadKey, likedByUserKey);
+  }
 }

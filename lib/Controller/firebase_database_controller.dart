@@ -227,4 +227,80 @@ class FirebaseDatabaseController {
         .doc(uploadId)
         .get();
   }
+
+  Future<void> sendLikeStatusToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(uploadKey)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_LIKED_BY:
+          FieldValue.arrayUnion([likedByUserKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(likedByUserKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_UPLOADS:
+          FieldValue.arrayUnion([uploadKey])
+    });
+  }
+
+  Future<void> removeLikeToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(uploadKey)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_LIKED_BY:
+          FieldValue.arrayRemove([likedByUserKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(likedByUserKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_UPLOADS:
+          FieldValue.arrayRemove([uploadKey])
+    });
+  }
+
+  Future<void> sendSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(uploadKey)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_SAVED_BY:
+          FieldValue.arrayUnion([likedByUserKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(likedByUserKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS:
+          FieldValue.arrayUnion([uploadKey])
+    });
+  }
+
+  Future<void> removeSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(uploadKey)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_SAVED_BY:
+          FieldValue.arrayRemove([likedByUserKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(likedByUserKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS:
+          FieldValue.arrayRemove([uploadKey])
+    });
+  }
 }
