@@ -52,4 +52,16 @@ class UploadCardFeedController {
     await _firebaseDatabaseController.removeLikeToDatabase(
         uploadKey, likedByUserKey);
   }
+
+  Future<void> sendSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.sendSaveToDatabase(
+        uploadKey, likedByUserKey);
+  }
+
+  Future<void> removeSaveToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.removeSaveToDatabase(
+        uploadKey, likedByUserKey);
+  }
 }

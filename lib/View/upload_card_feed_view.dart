@@ -221,11 +221,15 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
             ),
             IconButton(
               onPressed: () {
-                saveUpload();
+                setSaveToUpload();
               },
-              icon: Icon(
-                Icons.save_outlined,
-              ),
+              icon: hasSaved()
+                  ? Icon(
+                      Icons.save_rounded,
+                    )
+                  : Icon(
+                      Icons.save_outlined,
+                    ),
             ),
             IconButton(
               onPressed: () {
@@ -315,26 +319,31 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void setLikeToUpload() {
-    //TODO:
-    print('==============');
-    print('=====LIKE=====');
-    print('==============');
     setState(() {
       if (hasLiked()) {
         removeLikeToDatabase();
         upload!.likedBy.remove(widget.loggedUserKey);
       } else {
-        sendLikeStatusToDatabase();
+        sendLikeToDatabase();
         upload!.likedBy.add(widget.loggedUserKey);
       }
     });
   }
 
-  void saveUpload() {
+  void setSaveToUpload() {
     //TODO:
     print('==============');
     print('=====SAVE=====');
     print('==============');
+    setState(() {
+      if (hasSaved()) {
+        removeSaveToDatabase();
+        upload!.savedBy.remove(widget.loggedUserKey);
+      } else {
+        sendSaveToDatabase();
+        upload!.savedBy.add(widget.loggedUserKey);
+      }
+    });
   }
 
   void shareUpload() {
@@ -383,13 +392,32 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
     return false;
   }
 
-  Future<void> sendLikeStatusToDatabase() async {
+  bool hasSaved() {
+    for (String keyFromUser in upload!.savedBy) {
+      if (keyFromUser == widget.loggedUserKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> sendLikeToDatabase() async {
     await _uploadCardFeedController.sendLikeStatusToDatabase(
         upload!.keyFromUpload, widget.loggedUserKey);
   }
 
   Future<void> removeLikeToDatabase() async {
     await _uploadCardFeedController.removeLikeToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> sendSaveToDatabase() async {
+    await _uploadCardFeedController.sendSaveToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> removeSaveToDatabase() async {
+    await _uploadCardFeedController.removeSaveToDatabase(
         upload!.keyFromUpload, widget.loggedUserKey);
   }
 }
