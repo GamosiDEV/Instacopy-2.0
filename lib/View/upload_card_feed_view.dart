@@ -8,6 +8,7 @@ import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Controller/upload_card_feed_controller.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
+import 'package:instacopy2/View/commentaries_view.dart';
 import 'package:instacopy2/View/home_view.dart';
 import 'package:instacopy2/View/profile_view.dart';
 import 'package:share_plus/share_plus.dart';
@@ -331,10 +332,6 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void setSaveToUpload() {
-    //TODO:
-    print('==============');
-    print('=====SAVE=====');
-    print('==============');
     setState(() {
       if (hasSaved()) {
         removeSaveToDatabase();
@@ -357,6 +354,12 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
     print('==============');
     print('===COMMENTS===');
     print('==============');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CommentariesView(),
+      ),
+    );
   }
 
   void changeShowMoreDescriptionState() {
