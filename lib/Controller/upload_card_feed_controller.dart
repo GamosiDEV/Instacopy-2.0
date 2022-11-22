@@ -40,4 +40,16 @@ class UploadCardFeedController {
       return upload;
     });
   }
+
+  Future<void> sendLikeStatusToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.sendLikeStatusToDatabase(
+        uploadKey, likedByUserKey);
+  }
+
+  Future<void> removeLikeToDatabase(
+      String uploadKey, String likedByUserKey) async {
+    await _firebaseDatabaseController.removeLikeToDatabase(
+        uploadKey, likedByUserKey);
+  }
 }

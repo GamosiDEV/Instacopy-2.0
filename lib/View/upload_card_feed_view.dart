@@ -209,11 +209,15 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
           children: [
             IconButton(
               onPressed: () {
-                sendlikeToUpload();
+                setLikeToUpload();
               },
-              icon: Icon(
-                Icons.star_border,
-              ),
+              icon: hasLiked()
+                  ? const Icon(
+                      Icons.star,
+                    )
+                  : const Icon(
+                      Icons.star_border,
+                    ),
             ),
             IconButton(
               onPressed: () {
@@ -310,11 +314,20 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
         .getImageUrlBy(upload!.uploadStorageReference);
   }
 
-  void sendlikeToUpload() {
+  void setLikeToUpload() {
     //TODO:
     print('==============');
     print('=====LIKE=====');
     print('==============');
+    setState(() {
+      if (hasLiked()) {
+        removeLikeToDatabase();
+        upload!.likedBy.remove(widget.loggedUserKey);
+      } else {
+        sendLikeStatusToDatabase();
+        upload!.likedBy.add(widget.loggedUserKey);
+      }
+    });
   }
 
   void saveUpload() {
@@ -359,5 +372,24 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
 
   Future<UploadsModel> getUploadDataWithUploadKey() async {
     return await _uploadCardFeedController.getUploadDataWith(widget.uploadKey);
+  }
+
+  bool hasLiked() {
+    for (String keyFromUser in upload!.likedBy) {
+      if (keyFromUser == widget.loggedUserKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> sendLikeStatusToDatabase() async {
+    await _uploadCardFeedController.sendLikeStatusToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  Future<void> removeLikeToDatabase() async {
+    await _uploadCardFeedController.removeLikeToDatabase(
+        upload!.keyFromUpload, widget.loggedUserKey);
   }
 }
