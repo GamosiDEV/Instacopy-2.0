@@ -38,7 +38,7 @@ class _UploadImageViewState extends State<UploadImageView> {
             }),
         actions: [
           IconButton(
-              onPressed: hasUploadEnabled && hasSlectedFilePathValid()
+              onPressed: hasUploadEnabled && hasSelectedFilePathValid()
                   ? () {
                       disableUploadButton();
                       sendNewUploadToLoggedProfile();
@@ -155,7 +155,7 @@ class _UploadImageViewState extends State<UploadImageView> {
     _selectedFilePath = path;
   }
 
-  bool hasSlectedFilePathValid() {
+  bool hasSelectedFilePathValid() {
     if (_selectedFilePath != null) {
       return true;
     }

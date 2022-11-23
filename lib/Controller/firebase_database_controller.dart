@@ -333,5 +333,14 @@ class FirebaseDatabaseController {
             FieldValue.arrayRemove([upload.keyFromUpload])
       });
     }
+
+    //TODO: Excluir comentarios relacionados ao upload
+  }
+
+  void updateDescription(String keyFromUpload, String newDescription) {
+    FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(keyFromUpload)
+        .update({FIRESTORE_DATABASE_UPLOADS_DESCRIPTION: newDescription});
   }
 }

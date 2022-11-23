@@ -11,6 +11,7 @@ import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/commentaries_view.dart';
 import 'package:instacopy2/View/home_view.dart';
 import 'package:instacopy2/View/profile_view.dart';
+import 'package:instacopy2/View/upload_editor_view.dart';
 import 'package:share_plus/share_plus.dart';
 
 class UploadCardFeedView extends StatefulWidget {
@@ -143,7 +144,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
                           return [
                             const PopupMenuItem(
                               value: 0,
-                              child: Text('Editar'),
+                              child: Text('Editar descriçao'),
                             ),
                             const PopupMenuItem(
                               value: 1,
@@ -449,6 +450,12 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void editUpload() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UploadEditorView(upload: upload!),
+      ),
+    );
     //TODO: SEND TO EDIT UPLOAD VIEW
   }
 
@@ -470,9 +477,8 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
               ),
               TextButton(
                 onPressed: () {
-                  print('==Excluir==');
                   deleteUploadFromDatabase();
-                  Navigator.pop(context);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 child: Text(
                   'Excluir',
@@ -481,7 +487,6 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
             ],
           );
         });
-    //TODO: POPUP(REALMENTE DESEJA DELETAR A POSTAGEM?)... ... DELETAR A POSTAGEM
   }
 
   void deleteUploadFromDatabase() {
