@@ -64,4 +64,8 @@ class UploadCardFeedController {
     await _firebaseDatabaseController.removeSaveToDatabase(
         uploadKey, likedByUserKey);
   }
+
+  void deleteUploadFromDatabase(UploadsModel upload) {
+    _firebaseDatabaseController.deleteUploadFromDatabase(upload);
+  }
 }

@@ -303,4 +303,35 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([uploadKey])
     });
   }
+
+  Future<void> deleteUploadFromDatabase(UploadsModel upload) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(upload.keyFromUpload)
+        .delete();
+
+    await FirebaseStorage.instance.ref(upload.uploadStorageReference).delete();
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(upload.uploaderKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS:
+          FieldValue.arrayRemove([upload.keyFromUpload])
+    });
+
+    var userCollection = FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS);
+    var querySnapshots = await userCollection.get();
+    for (var doc in querySnapshots.docs) {
+      await doc.reference.update({
+        FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS:
+            FieldValue.arrayRemove([upload.keyFromUpload])
+      });
+      await doc.reference.update({
+        FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_UPLOADS:
+            FieldValue.arrayRemove([upload.keyFromUpload])
+      });
+    }
+  }
 }

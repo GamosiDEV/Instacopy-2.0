@@ -135,14 +135,35 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
                     ),
                   ),
                 ),
-                Spacer(),
-                IconButton(
-                  onPressed: () {
-                    //TODO: mostrar opções de ação para este card
-                  },
-                  alignment: Alignment.centerRight,
-                  icon: Icon(Icons.more_vert),
-                ),
+                Spacer(), //TODO: mostrar opções de ação para este card (Icons.more_vert)
+                hasUploadFromLoggedUser()
+                    ? PopupMenuButton(
+                        icon: Icon(Icons.more_vert),
+                        itemBuilder: (context) {
+                          return [
+                            const PopupMenuItem(
+                              value: 0,
+                              child: Text('Editar'),
+                            ),
+                            const PopupMenuItem(
+                              value: 1,
+                              child: Text('Excluir'),
+                            ),
+                          ];
+                        },
+                        onSelected: (value) {
+                          switch (value) {
+                            case 0:
+                              editUpload();
+                              break;
+                            case 1:
+                              deleteUpload();
+                              break;
+                          }
+                        },
+                      )
+                    : const IconButton(
+                        onPressed: null, icon: Icon(Icons.more_vert))
               ],
             ),
           ),
@@ -350,10 +371,6 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   void showAllCommentaries() {
-    //TODO:
-    print('==============');
-    print('===COMMENTS===');
-    print('==============');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -422,5 +439,54 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   Future<void> removeSaveToDatabase() async {
     await _uploadCardFeedController.removeSaveToDatabase(
         upload!.keyFromUpload, widget.loggedUserKey);
+  }
+
+  bool hasUploadFromLoggedUser() {
+    if (widget.userUploaderKey == widget.loggedUserKey) {
+      return true;
+    }
+    return false;
+  }
+
+  void editUpload() {
+    //TODO: SEND TO EDIT UPLOAD VIEW
+  }
+
+  void deleteUpload() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Excluir Postagem'),
+            content: Text('Deseja realmente excluir esta postagem?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancelar',
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  print('==Excluir==');
+                  deleteUploadFromDatabase();
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Excluir',
+                ),
+              ),
+            ],
+          );
+        });
+    //TODO: POPUP(REALMENTE DESEJA DELETAR A POSTAGEM?)... ... DELETAR A POSTAGEM
+  }
+
+  void deleteUploadFromDatabase() {
+    if (upload != null) {
+      _uploadCardFeedController.deleteUploadFromDatabase(upload!);
+    }
   }
 }
