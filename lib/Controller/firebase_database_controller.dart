@@ -344,8 +344,63 @@ class FirebaseDatabaseController {
         .update({FIRESTORE_DATABASE_UPLOADS_DESCRIPTION: newDescription});
   }
 
-  Future<List<UsersModel>> searchUsers(String searchString) async {}
+  Future<List<UsersModel>> searchUsers(String searchString) async {
+    List<UsersModel> listOfUsers = [];
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .get()
+        .then((allUsers) async {
+      for (final user in allUsers.docs) {
+        if (user
+                .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME]
+                .toString()
+                .contains(searchString) ||
+            user
+                .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_FULLNAME]
+                .toString()
+                .contains(searchString) ||
+            searchString == '') {
+          UsersModel searchedUser = UsersModel(
+              keyFromUser: user.data()[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY]);
+          searchedUser.setUserModelWith(user.data());
+          listOfUsers.add(searchedUser);
+        }
+      }
+    });
+    return listOfUsers;
+  }
 
   Future<List<UsersModel>> searchUsersInPreLoadedList(
-      List<String>? preLoadedListOfSearch, String searchString) async {}
+      List<String>? preLoadedListOfSearch, String searchString) async {
+    List<UsersModel> listOfUsers = [];
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .get()
+        .then((allUsers) async {
+      for (final preLoadedUserKey in preLoadedListOfSearch!) {
+        for (final user in allUsers.docs) {
+          if ((user
+                      .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME]
+                      .toString()
+                      .contains(searchString) ||
+                  user
+                      .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_FULLNAME]
+                      .toString()
+                      .contains(searchString) ||
+                  searchString == '') &&
+              user.data()[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY] ==
+                  preLoadedUserKey) {
+            UsersModel searchedUser = UsersModel(
+                keyFromUser:
+                    user.data()[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY]);
+            searchedUser.setUserModelWith(user.data());
+            listOfUsers.add(searchedUser);
+          }
+        }
+      }
+    });
+    return listOfUsers;
+  }
 }

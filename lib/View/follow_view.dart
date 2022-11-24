@@ -53,8 +53,10 @@ class _FollowViewState extends State<FollowView> {
         ),
         body: TabBarView(
           children: [
-            SearchCardView(),
-            FollowerOfView(),
+            SearchCardView(
+                preLoadedListOfSearch: widget.actualProfileData.followedBy),
+            SearchCardView(
+                preLoadedListOfSearch: widget.actualProfileData.followerOf),
           ],
         ),
       ),
