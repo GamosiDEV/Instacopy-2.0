@@ -343,4 +343,9 @@ class FirebaseDatabaseController {
         .doc(keyFromUpload)
         .update({FIRESTORE_DATABASE_UPLOADS_DESCRIPTION: newDescription});
   }
+
+  Future<List<UsersModel>> searchUsers(String searchString) async {}
+
+  Future<List<UsersModel>> searchUsersInPreLoadedList(
+      List<String>? preLoadedListOfSearch, String searchString) async {}
 }
