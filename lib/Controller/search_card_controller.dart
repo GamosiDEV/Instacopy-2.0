@@ -14,4 +14,9 @@ class SearchCardController {
   Future<List<UsersModel>> searchInAllUsers(String searchString) async {
     return await _firebaseDatabaseController.searchUsers(searchString);
   }
+
+  Future<String> getProfileImageUrlWith(String imageReference) async {
+    return await _firebaseDatabaseController
+        .getProfileImageUrlFrom(imageReference);
+  }
 }
