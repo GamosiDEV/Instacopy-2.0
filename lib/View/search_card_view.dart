@@ -174,16 +174,16 @@ class _SearchCardViewState extends State<SearchCardView> {
     return await _searchCardController.getProfileImageUrlWith(reference);
   }
 
-  void followSelectedUserBy(String userKey) {
-    //TODO: FAZER O USUARIO LOGADO SEGUIR O USUARIO
+  void followSelectedUserBy(String userKey) async {
+    await _searchCardController.followUserBy(userKey);
   }
 
-  void unfollowSelectedUserBy(String userKey) {
-    //TODO: FAZER O USUARIO LOGADO DEIXAR DE SEGUIR ESTE USUARIO
+  void unfollowSelectedUserBy(String userKey) async {
+    await _searchCardController.unfollowUserBy(userKey);
   }
 
-  void removeFollowerBy(String userKey) {
-    //TODO: REMOVER ESTE USUARIO DOS SEGUIDORES DO USUARIO LOGADO
+  void removeFollowerBy(String userKey) async {
+    await _searchCardController.removeFollowerBy(userKey);
   }
 
   TextSpan followAccount(String userKey) {
@@ -224,7 +224,7 @@ class _SearchCardViewState extends State<SearchCardView> {
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
           onPressed: () {
-            removeFollowerBy(user.keyFromUser);
+            alertDialogFromRemoveFollower(user.keyFromUser);
           },
           child: Text('Remover')),
     );
@@ -237,9 +237,9 @@ class _SearchCardViewState extends State<SearchCardView> {
         onPressed: () {
           if (user.followedBy
               .contains(ApplicationController().getLoggedUserId())) {
-            followSelectedUserBy(user.keyFromUser);
-          } else {
             unfollowSelectedUserBy(user.keyFromUser);
+          } else {
+            followSelectedUserBy(user.keyFromUser);
           }
         },
         child: Text(
@@ -249,5 +249,35 @@ class _SearchCardViewState extends State<SearchCardView> {
         ),
       ),
     );
+  }
+
+  void alertDialogFromRemoveFollower(String keyFromUser) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Remover Seguidor'),
+            content: Text('Deseja realmente remover este seguidor?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancelar',
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  removeFollowerBy(keyFromUser);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Remover',
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

@@ -19,4 +19,16 @@ class SearchCardController {
     return await _firebaseDatabaseController
         .getProfileImageUrlFrom(imageReference);
   }
+
+  Future<void> followUserBy(String userKey) async {
+    return await _firebaseDatabaseController.followUserBy(userKey);
+  }
+
+  Future<void> unfollowUserBy(String userKey) async {
+    return await _firebaseDatabaseController.unfollowUserBy(userKey);
+  }
+
+  Future<void> removeFollowerBy(String userKey) async {
+    return await _firebaseDatabaseController.removeFollowerBy(userKey);
+  }
 }

@@ -403,4 +403,58 @@ class FirebaseDatabaseController {
     });
     return listOfUsers;
   }
+
+  Future<void> followUserBy(String userKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF:
+          FieldValue.arrayUnion([userKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(userKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
+          FieldValue.arrayUnion([getLoggedUserId()])
+    });
+  }
+
+  Future<void> unfollowUserBy(String userKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF:
+          FieldValue.arrayRemove([userKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(userKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
+          FieldValue.arrayRemove([getLoggedUserId()])
+    });
+  }
+
+  Future<void> removeFollowerBy(String userKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
+          FieldValue.arrayRemove([userKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(userKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF:
+          FieldValue.arrayRemove([getLoggedUserId()])
+    });
+  }
 }
