@@ -5,6 +5,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/followed_by_view.dart';
 import 'package:instacopy2/View/follower_of_view.dart';
+import 'package:instacopy2/View/search_card_view.dart';
+
+const String FOLLOWED_BY = 'followed_by_tab';
+const String FOLLOWER_OF = 'follower_of_tab';
 
 class FollowView extends StatefulWidget {
   final int initialIndex;
@@ -26,6 +30,7 @@ class _FollowViewState extends State<FollowView> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          title: Text(widget.actualProfileData.username),
           bottom: TabBar(
             tabs: [
               Padding(
@@ -51,8 +56,16 @@ class _FollowViewState extends State<FollowView> {
         ),
         body: TabBarView(
           children: [
-            FollowedByView(),
-            FollowerOfView(),
+            SearchCardView(
+              preLoadedListOfSearch: widget.actualProfileData.followedBy,
+              actualSelectedSearchTab: FOLLOWED_BY,
+              actualProfileKey: widget.actualProfileData.keyFromUser,
+            ),
+            SearchCardView(
+              preLoadedListOfSearch: widget.actualProfileData.followerOf,
+              actualSelectedSearchTab: FOLLOWER_OF,
+              actualProfileKey: widget.actualProfileData.keyFromUser,
+            ),
           ],
         ),
       ),
