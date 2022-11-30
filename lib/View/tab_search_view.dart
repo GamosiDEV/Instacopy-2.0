@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
+import 'package:instacopy2/View/search_card_view.dart';
 
 class TabSearchView extends StatefulWidget {
   final String? loggedUserId;
@@ -28,20 +29,7 @@ class _TabSearchViewState extends State<TabSearchView> {
           ),
         ],
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Sair da Pesquisa'),
-            ),
-          ],
-        ),
-      ),
+      body: SearchCardView(),
     );
   }
 
