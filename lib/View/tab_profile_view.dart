@@ -258,11 +258,10 @@ class _TabProfileViewState extends State<TabProfileView> {
                                                     child: ElevatedButton(
                                                       onPressed: () {
                                                         if (hasProfileFollowedByLoggedUser()) {
-                                                          print(
-                                                              'Deixar de seguir');
+                                                          sendUnfollowUserToDatabase();
                                                           //TODO-metodo para deixar de seguir
                                                         } else {
-                                                          print('Seguir');
+                                                          followUser();
                                                           //TODO-metodo para seguir
                                                         }
                                                       },
@@ -492,5 +491,55 @@ class _TabProfileViewState extends State<TabProfileView> {
           'Perfil foi atualizado com sucesso', context);
       setState(() {});
     }
+  }
+
+  void sendFollowUserToDatabase(String userKey) async {
+    await _tabProfileController.followUserBy(userKey);
+    setState(() {
+      usersModel.followedBy
+          .add(ApplicationController().getLoggedUserId().toString());
+    });
+  }
+
+  void unfollowSelectedUserBy(String userKey) async {
+    await _tabProfileController.unfollowUserBy(userKey);
+    setState(() {
+      usersModel.followedBy
+          .remove(ApplicationController().getLoggedUserId().toString());
+    });
+  }
+
+  void followUser() {
+    sendFollowUserToDatabase(usersModel.keyFromUser);
+  }
+
+  void sendUnfollowUserToDatabase() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Deixar de seguir?'),
+            content: Text('Deseja realmente deixar de seguir este perfil?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancelar',
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  unfollowSelectedUserBy(usersModel.keyFromUser);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Sim',
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

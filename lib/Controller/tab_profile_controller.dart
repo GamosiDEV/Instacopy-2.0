@@ -19,4 +19,12 @@ class TabProfileController {
   Future<List<UploadsModel>> getUploadsBy(List<String> uploads) async {
     return await _firebaseDatabaseController.getUploadsAndDonwloadUrl(uploads);
   }
+
+  Future<void> followUserBy(String userKey) async {
+    return await _firebaseDatabaseController.followUserBy(userKey);
+  }
+
+  Future<void> unfollowUserBy(String userKey) async {
+    return await _firebaseDatabaseController.unfollowUserBy(userKey);
+  }
 }
