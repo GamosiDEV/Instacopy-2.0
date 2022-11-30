@@ -59,7 +59,10 @@ class _SearchCardViewState extends State<SearchCardView> {
                     snapshot.connectionState == ConnectionState.done) {
                   List<UsersModel> searchUsersList =
                       snapshot.data as List<UsersModel>;
-                  //TODO: AINDA NÃO CONSIGO EXIBIER OS DADOS
+                  searchUsersList.sort(
+                    (a, b) =>
+                        b.followedBy.length.compareTo(a.followedBy.length),
+                  );
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: searchUsersList.length,
