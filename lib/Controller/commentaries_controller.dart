@@ -10,3 +10,4 @@ class CommentariesController {
     await _firebaseDatabaseController.uploadCommentarie(comment, upload);
   }
 }
+

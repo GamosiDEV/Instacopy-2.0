@@ -489,8 +489,3 @@ class FirebaseDatabaseController {
     });
   }
 }
-/**
- * .update({
-      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
-          FieldValue.arrayRemove([userKey])
- */
