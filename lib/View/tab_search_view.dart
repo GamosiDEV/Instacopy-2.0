@@ -11,21 +11,21 @@ class TabSearchView extends StatefulWidget {
 }
 
 class _TabSearchViewState extends State<TabSearchView> {
-  ApplicationController _applicationController = ApplicationController();
+  final ApplicationController _applicationController = ApplicationController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instacopy'),
+        title: const Text('Instacopy'),
         actions: [
           IconButton(
             onPressed: toUploadImageView,
-            icon: Icon(Icons.add_a_photo),
+            icon: const Icon(Icons.add_a_photo),
           ),
           IconButton(
             onPressed: () => _applicationController.logout(context),
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
