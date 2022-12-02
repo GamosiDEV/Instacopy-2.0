@@ -46,6 +46,8 @@ const String FIRESTORE_DATABASE_COMMENTARIES_COMMENT_LIKED_BY =
     'comment-liked-by';
 const String FIRESTORE_DATABASE_COMMENTARIES_COMMENT_KEY = 'comment-key';
 const String FIRESTORE_DATABASE_COMMENTARIES_SENDED_BY = 'sended-by';
+const String FIRESTORE_DATABASE_COMMENTARIES_KEY_FROM_COMMENT_UPLOAD =
+    'key-from-comment-upload';
 
 /*Padrão de upload para o Storage e salvar auxiliar a salvar no database
 **"users/(User id do Cloud Firestore)/profile-images/imagem" (Para Imagens de perfil)

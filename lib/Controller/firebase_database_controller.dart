@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instacopy2/Model/commentarie_model.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/firebase_cloudfirestore_names.dart';
@@ -457,4 +458,39 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([getLoggedUserId()])
     });
   }
+
+  Future<void> uploadCommentarie(String comment, UploadsModel upload) async {
+    final instance = await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .doc();
+
+    CommentarieModel commentarieModel = CommentarieModel(
+        keyFromComment: instance.id,
+        sendedByKey: getLoggedUserId().toString(),
+        keyFromUpload: upload.keyFromUpload,
+        comment: comment);
+
+    await instance.set(commentarieModel.getMapFromThisModel());
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(commentarieModel.sendedByKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_COMMENTS_SENDED:
+          FieldValue.arrayUnion([commentarieModel.keyFromComment])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(commentarieModel.keyFromUpload)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_COMMENT_KEYS:
+          FieldValue.arrayUnion([commentarieModel.keyFromComment])
+    });
+  }
 }
+/**
+ * .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
+          FieldValue.arrayRemove([userKey])
+ */
