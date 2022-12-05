@@ -52,6 +52,9 @@ class _CommentariesViewState extends State<CommentariesView> {
                               comment.connectionState == ConnectionState.done) {
                             List<CommentarieModel> listOfComments =
                                 comment.data as List<CommentarieModel>;
+                            listOfComments.sort((a, b) => b
+                                .commentLikedBy.length
+                                .compareTo(a.commentLikedBy.length));
                             return ListView.builder(
                               itemCount: listOfComments.length,
                               itemBuilder: (context, index) {
