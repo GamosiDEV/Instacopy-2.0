@@ -92,7 +92,6 @@ class _SearchCardViewState extends State<SearchCardView> {
   }
 
   Widget showUserCard(BuildContext context, UsersModel searchUser) {
-    print('==' + searchUser.username);
     return InkWell(
       onTap: () {
         Navigator.push(
