@@ -376,7 +376,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
       context,
       MaterialPageRoute(
         builder: (context) => CommentariesView(
-          upload: upload!,
+          uploadKey: upload!.keyFromUpload,
         ),
       ),
     );
