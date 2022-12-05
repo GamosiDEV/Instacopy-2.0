@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instacopy2/Model/commentarie_model.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/firebase_cloudfirestore_names.dart';
@@ -457,4 +458,115 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([getLoggedUserId()])
     });
   }
+
+  Future<void> uploadCommentarie(String comment, UploadsModel upload) async {
+    final instance = await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .doc();
+
+    CommentarieModel commentarieModel = CommentarieModel(
+        keyFromComment: instance.id,
+        sendedByKey: getLoggedUserId().toString(),
+        keyFromUpload: upload.keyFromUpload,
+        comment: comment);
+
+    await instance.set(commentarieModel.getMapFromThisModel());
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(commentarieModel.sendedByKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_COMMENTS_SENDED:
+          FieldValue.arrayUnion([commentarieModel.keyFromComment])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(commentarieModel.keyFromUpload)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_COMMENT_KEYS:
+          FieldValue.arrayUnion([commentarieModel.keyFromComment])
+    });
+  }
+
+  Future<List<CommentarieModel>> getCommentariesWith(
+      List<String> commentKeys) async {
+    List<CommentarieModel> listOfCommentaries = [];
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .get()
+        .then((commentSnapshot) {
+      for (final preLoadedCommentKey in commentKeys) {
+        for (final commentFromDatabase in commentSnapshot.docs) {
+          if (commentFromDatabase
+                  .data()[FIRESTORE_DATABASE_COMMENTARIES_COMMENT_KEY] ==
+              preLoadedCommentKey) {
+            CommentarieModel commentarie = CommentarieModel(
+                keyFromComment: '',
+                sendedByKey: '',
+                keyFromUpload: '',
+                comment: '');
+            commentarie.setUserModelWith(commentFromDatabase.data());
+            listOfCommentaries.add(commentarie);
+          }
+        }
+      }
+    });
+    return listOfCommentaries;
+  }
+
+  Future<void> removeLikeFrom(CommentarieModel comment) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_COMMENTS:
+          FieldValue.arrayRemove([comment.keyFromComment])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .doc(comment.keyFromComment)
+        .update({
+      FIRESTORE_DATABASE_COMMENTARIES_COMMENT_LIKED_BY:
+          FieldValue.arrayRemove([getLoggedUserId()])
+    });
+  }
+
+  Future<void> sendLikeFor(CommentarieModel comment) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_COMMENTS:
+          FieldValue.arrayUnion([comment.keyFromComment])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .doc(comment.keyFromComment)
+        .update({
+      FIRESTORE_DATABASE_COMMENTARIES_COMMENT_LIKED_BY:
+          FieldValue.arrayUnion([getLoggedUserId()])
+    });
+  }
 }
+/**
+ * Future<void> unfollowUserBy(String userKey) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(getLoggedUserId())
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF:
+          FieldValue.arrayRemove([userKey])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(userKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
+          FieldValue.arrayRemove([getLoggedUserId()])
+    });
+  }
+ */
