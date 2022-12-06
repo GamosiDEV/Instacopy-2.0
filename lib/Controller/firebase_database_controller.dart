@@ -550,23 +550,53 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([getLoggedUserId()])
     });
   }
-}
-/**
- * Future<void> unfollowUserBy(String userKey) async {
-    await FirebaseFirestore.instance
-        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
-        .doc(getLoggedUserId())
-        .update({
-      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF:
-          FieldValue.arrayRemove([userKey])
-    });
+
+  Future<List<UploadsModel>> getListOfPostForFeed() async {
+    List<UploadsModel> feedList = [];
+
+    List<String> loggedAsUserFollowerOf = [];
 
     await FirebaseFirestore.instance
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
-        .doc(userKey)
-        .update({
-      FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY:
-          FieldValue.arrayRemove([getLoggedUserId()])
+        .doc(getLoggedUserId())
+        .get()
+        .then((loggedUserData) {
+      for (final user in loggedUserData
+          .data()![FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF]) {
+        loggedAsUserFollowerOf.add(user.toString());
+      }
     });
+
+    List<String> keysFromAllUploadsOfAllFollowerOf = [];
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .get()
+        .then((allDatabaseUsers) {
+      for (final user in allDatabaseUsers.docs) {
+        for (final followerOfKey in loggedAsUserFollowerOf) {
+          if (followerOfKey ==
+              user.data()[FIRESTORE_DATABASE_USERS_DOCUMENT_KEY]) {
+            for (final uploadKey in user
+                .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS]) {
+              keysFromAllUploadsOfAllFollowerOf.add(uploadKey.toString());
+            }
+          }
+        }
+      }
+    });
+
+    for (String uploadKey in keysFromAllUploadsOfAllFollowerOf) {
+      await FirebaseFirestore.instance
+          .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+          .doc(uploadKey)
+          .get()
+          .then((upload) {
+        UploadsModel uploadsModel = UploadsModel('', Timestamp.now(), '');
+        uploadsModel.setUserModelWith(upload.data());
+        feedList.add(uploadsModel);
+      });
+    }
+
+    return feedList;
   }
- */
+}
