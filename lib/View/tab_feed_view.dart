@@ -55,6 +55,18 @@ class _TabFeedViewState extends State<TabFeedView> {
                   }
                   return 0;
                 }));
+                if (listOfPosts.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Tente procurar e seguir novos usuarios na aba de "Pesquisar" para popular seu feed !',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }
                 return RefreshIndicator(
                   onRefresh: pullToRefresh,
                   child: ScrollablePositionedList.builder(
