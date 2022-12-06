@@ -276,34 +276,32 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
         Container(
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-          child: Expanded(
-            child: RichText(
-              maxLines: showMoreDescription ? 50 : 3,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              text: TextSpan(
-                text: profileUser!.username + '  ',
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    sendToProfile();
-                  },
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                children: [
-                  TextSpan(
-                      text: upload!.description,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          changeShowMoreDescriptionState();
-                        }),
-                ],
+          child: RichText(
+            maxLines: showMoreDescription ? 50 : 3,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            text: TextSpan(
+              text: profileUser!.username + '  ',
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  sendToProfile();
+                },
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
+              children: [
+                TextSpan(
+                    text: upload!.description,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        changeShowMoreDescriptionState();
+                      }),
+              ],
             ),
           ),
         ),
