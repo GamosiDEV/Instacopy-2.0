@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "770889539334",
+    "project_id": "instacopy-2",
+    "storage_bucket": "instacopy-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770889539334:android:42687f6f25eed860e7c887",
+        "android_client_info": {
+          "package_name": "com.example.instacopy2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "770889539334-k2mal7tja3joli752p9e5cm9seec441o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB72qS4TvxK_ogc5YDrnfWEDbQr-yV9Hqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "770889539334-k2mal7tja3joli752p9e5cm9seec441o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "770889539334-jvpcc7v1fumjh1rlcve05ff96883i2lb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.instacopy2"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
