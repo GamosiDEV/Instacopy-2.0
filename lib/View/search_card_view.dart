@@ -215,7 +215,8 @@ class _SearchCardViewState extends State<SearchCardView> {
         widget.actualProfileKey == ApplicationController().getLoggedUserId()) {
       return removeThisFollowerButton(user);
     }
-    if (widget.actualSelectedSearchTab != null) {
+    if (widget.actualSelectedSearchTab != null &&
+        user.keyFromUser != ApplicationController().getLoggedUserId()) {
       return followOrUnfollowButton(user);
     }
     return Container();
