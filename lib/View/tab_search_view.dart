@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instacopy2/Controller/application_controller.dart';
+import 'package:instacopy2/View/home_view.dart';
 import 'package:instacopy2/View/search_card_view.dart';
 
 class TabSearchView extends StatefulWidget {
@@ -15,21 +16,28 @@ class _TabSearchViewState extends State<TabSearchView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Instacopy'),
-        actions: [
-          IconButton(
-            onPressed: toUploadImageView,
-            icon: const Icon(Icons.add_a_photo),
-          ),
-          IconButton(
-            onPressed: () => _applicationController.logout(context),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeFeedView()));
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Instacopy'),
+          actions: [
+            IconButton(
+              onPressed: toUploadImageView,
+              icon: const Icon(Icons.add_a_photo),
+            ),
+            IconButton(
+              onPressed: () => _applicationController.logout(context),
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        body: SearchCardView(),
       ),
-      body: SearchCardView(),
     );
   }
 
