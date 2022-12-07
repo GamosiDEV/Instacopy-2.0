@@ -8,17 +8,14 @@ import 'package:instacopy2/Controller/search_card_controller.dart';
 import 'package:instacopy2/Model/users_model.dart';
 import 'package:instacopy2/View/follow_view.dart';
 import 'package:instacopy2/View/profile_view.dart';
+import 'package:instacopy2/firebase_cloudfirestore_names.dart';
 
 class SearchCardView extends StatefulWidget {
-  List<String>? preLoadedListOfSearch;
   String? actualSelectedSearchTab;
   String? actualProfileKey;
 
   SearchCardView(
-      {Key? key,
-      this.preLoadedListOfSearch,
-      this.actualSelectedSearchTab,
-      this.actualProfileKey})
+      {Key? key, this.actualSelectedSearchTab, this.actualProfileKey})
       : super(key: key);
 
   @override
@@ -83,9 +80,16 @@ class _SearchCardViewState extends State<SearchCardView> {
   }
 
   Future<List<UsersModel>> searchUsersByInputText() async {
-    if (widget.preLoadedListOfSearch != null) {
+    if (widget.actualSelectedSearchTab == FOLLOWED_BY) {
       return await _searchCardController.searchInPreLoadedList(
-          widget.preLoadedListOfSearch, _searchTextController.text);
+          widget.actualProfileKey.toString(),
+          _searchTextController.text,
+          FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWED_BY);
+    } else if (widget.actualSelectedSearchTab == FOLLOWER_OF) {
+      return await _searchCardController.searchInPreLoadedList(
+          widget.actualProfileKey.toString(),
+          _searchTextController.text,
+          FIRESTORE_DATABASE_USERS_DOCUMENT_FOLLOWER_OF);
     }
     return await _searchCardController
         .searchInAllUsers(_searchTextController.text);
@@ -177,15 +181,21 @@ class _SearchCardViewState extends State<SearchCardView> {
   }
 
   void followSelectedUserBy(String userKey) async {
-    await _searchCardController.followUserBy(userKey);
+    await _searchCardController.followUserBy(userKey).then((value) {
+      setState(() {});
+    });
   }
 
   void unfollowSelectedUserBy(String userKey) async {
-    await _searchCardController.unfollowUserBy(userKey);
+    await _searchCardController.unfollowUserBy(userKey).then((value) {
+      setState(() {});
+    });
   }
 
   void removeFollowerBy(String userKey) async {
-    await _searchCardController.removeFollowerBy(userKey);
+    await _searchCardController.removeFollowerBy(userKey).then((value) {
+      setState(() {});
+    });
   }
 
   TextSpan followAccount(String userKey) {

@@ -373,14 +373,25 @@ class FirebaseDatabaseController {
   }
 
   Future<List<UsersModel>> searchUsersInPreLoadedList(
-      List<String>? preLoadedListOfSearch, String searchString) async {
+      String profileUserKey, String searchString, String followListName) async {
     List<UsersModel> listOfUsers = [];
+    List<String> listOfFollowersForSearch = [];
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(profileUserKey)
+        .get()
+        .then((profileUserSnapshot) {
+      for (final followOfUser in profileUserSnapshot.data()![followListName]) {
+        listOfFollowersForSearch.add(followOfUser.toString());
+      }
+    });
 
     await FirebaseFirestore.instance
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .get()
         .then((allUsers) async {
-      for (final preLoadedUserKey in preLoadedListOfSearch!) {
+      for (final preLoadedUserKey in listOfFollowersForSearch) {
         for (final user in allUsers.docs) {
           if ((user
                       .data()[FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME]

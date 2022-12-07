@@ -6,9 +6,9 @@ class SearchCardController {
       FirebaseDatabaseController();
 
   Future<List<UsersModel>> searchInPreLoadedList(
-      List<String>? preLoadedListOfSearch, String searchString) async {
+      String profileUserKey, String searchString, String followListName) async {
     return await _firebaseDatabaseController.searchUsersInPreLoadedList(
-        preLoadedListOfSearch, searchString);
+        profileUserKey, searchString, followListName);
   }
 
   Future<List<UsersModel>> searchInAllUsers(String searchString) async {
