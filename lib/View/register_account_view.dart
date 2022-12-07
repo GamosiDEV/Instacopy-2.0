@@ -20,9 +20,12 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   TextEditingController fullnameTextFieldController = TextEditingController();
   TextEditingController usernameTextFieldController = TextEditingController();
   TextEditingController passwordTextFieldController = TextEditingController();
+  TextEditingController passwordConfirmTextFieldController =
+      TextEditingController();
 
   String? emailTextFieldErrorHint;
   String? passwordTextFieldErrorHint;
+  String? passwordConfirmTextFieldErrorHint;
   String? fullnameTextFieldErrorHint;
   String? usernameTextFieldErrorHint;
 
@@ -30,6 +33,8 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   static const String INVALID_FULLNAME = 'INVALID_FULLNAME';
   static const String INVALID_USERNAME = 'INVALID_USERNAME';
   static const String INVALID_PASSWORD = 'INVALID_PASSWORD';
+  static const String INVALID_CONFIRM_PASSWORD = 'INVALID_CONFIRM_PASSWORD';
+  static const String DIVERGENT_PASSWORD = 'DIVERGENT_PASSWORD';
 
   UsersModel? newUserModel = null;
 
@@ -134,6 +139,23 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      controller: passwordConfirmTextFieldController,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        labelText: 'Confirmar Senha',
+                        hintText: 'Repita sua senha',
+                        errorText: passwordTextFieldErrorHint,
+                      ),
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 24.0),
@@ -185,6 +207,15 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
       setErrorHint(INVALID_PASSWORD);
       asValid = false;
     }
+    if (!asDataInTextField(passwordConfirmTextFieldController)) {
+      setErrorHint(INVALID_CONFIRM_PASSWORD);
+      asValid = false;
+    }
+    if (passwordConfirmTextFieldController.text !=
+        passwordTextFieldController.text) {
+      setErrorHint(DIVERGENT_PASSWORD);
+      asValid = false;
+    }
     return asValid;
   }
 
@@ -212,6 +243,12 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
       }
       if (field == INVALID_USERNAME) {
         usernameTextFieldErrorHint = 'Nome de usuario invalido!';
+      }
+      if (field == DIVERGENT_PASSWORD) {
+        passwordTextFieldErrorHint = 'Senha e confirmação diferentes';
+      }
+      if (field == INVALID_CONFIRM_PASSWORD) {
+        passwordConfirmTextFieldErrorHint = 'Senha digitada invalida!';
       }
     });
   }
