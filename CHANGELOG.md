@@ -3,7 +3,7 @@ Todas as alterações no projeto estão listadas neste arquivo.
 
 Disclaimer: pode ser notada um grande espassamento entre as datas entre atualizações do projeto e isto é dado devido o fato de que quando estava produzindo o mesmo passei por dificuldades e problemas pessoais e durante alguns momentos tive de parar com o projeto, mesmo assim tive forças e empenho para continua-lo, peço que veja com carinho.
 
-- [Unreleased - https://github.com/GamosiDEV/Instacopy-2.0/blob/develop/CHANGELOG.md#unreleased---08122022-2022-12-08](#Unreleased)
+- [Unreleased](#unreleased)
  
 ## [Unreleased] - 08/12/2022 (2022-12-08)
  
