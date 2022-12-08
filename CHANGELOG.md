@@ -2,6 +2,8 @@
 Todas as alterações no projeto estão listadas neste arquivo.
 
 Disclaimer: pode ser notada um grande espassamento entre as datas entre atualizações do projeto e isto é dado devido o fato de que quando estava produzindo o mesmo passei por dificuldades e problemas pessoais e durante alguns momentos tive de parar com o projeto, mesmo assim tive forças e empenho para continua-lo, peço que veja com carinho.
+
+(#1.0.0)
  
 ## [Unreleased] - 08/12/2022 (2022-12-08)
  
