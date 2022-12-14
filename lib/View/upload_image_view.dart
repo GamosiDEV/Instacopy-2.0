@@ -131,6 +131,8 @@ class _UploadImageViewState extends State<UploadImageView> {
   }
 
   Future<void> selectImageFromHardwareStorage() async {
+    await FilePicker.platform.clearTemporaryFiles();
+
     final image = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.custom,

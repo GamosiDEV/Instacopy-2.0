@@ -43,18 +43,6 @@ class _TabFeedViewState extends State<TabFeedView> {
                   feedSnapshot.connectionState == ConnectionState.done) {
                 List<UploadsModel> listOfPosts =
                     feedSnapshot.data as List<UploadsModel>;
-                listOfPosts.sort(
-                  (a, b) => b.likedBy.length.compareTo(a.likedBy.length),
-                );
-                listOfPosts.sort(
-                  (a, b) => b.uploadDateTime.compareTo(a.uploadDateTime),
-                );
-                listOfPosts.sort(((a, b) {
-                  if (a.uploaderKey == b.uploaderKey) {
-                    return -1;
-                  }
-                  return 0;
-                }));
                 if (listOfPosts.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -67,6 +55,18 @@ class _TabFeedViewState extends State<TabFeedView> {
                     ),
                   );
                 }
+                listOfPosts.sort(
+                  (a, b) => b.likedBy.length.compareTo(a.likedBy.length),
+                );
+                listOfPosts.sort(
+                  (a, b) => b.uploadDateTime.compareTo(a.uploadDateTime),
+                );
+                listOfPosts.sort(((a, b) {
+                  if (a.uploaderKey == b.uploaderKey) {
+                    return -1;
+                  }
+                  return 0;
+                }));
                 return RefreshIndicator(
                   onRefresh: pullToRefresh,
                   child: ScrollablePositionedList.builder(
