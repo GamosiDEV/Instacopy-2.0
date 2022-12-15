@@ -38,7 +38,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
 
   UsersModel? newUserModel = null;
 
-  bool asSignUpButtonEnabled = false;
+  //bool asSignUpButtonEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +160,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 24.0),
                     child: ElevatedButton(
-                      onPressed: asSignUpButtonEnabled ? null : onPressSignUp,
+                      onPressed: onPressSignUp,
                       child: const Text(
                         'Cadastrar-se',
                         style: TextStyle(
@@ -269,22 +269,10 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   }
 
   void progressWithAccountCreation() async {
-    chageSignUpButtonState();
     await createAccountOnAuthAndSetDataOnNewUserModel().then((value) {
       if (isNewUserModelWithData()) {
         _registerAccountController.createNewAccountOnFirestore(
             newUserModel!, context);
-        chageSignUpButtonState();
-      }
-    });
-  }
-
-  void chageSignUpButtonState() {
-    setState(() {
-      if (asSignUpButtonEnabled) {
-        asSignUpButtonEnabled = false;
-      } else {
-        asSignUpButtonEnabled = true;
       }
     });
   }
