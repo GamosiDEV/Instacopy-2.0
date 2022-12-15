@@ -276,8 +276,12 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
   }
 
   Future<String> getUrlFromProfileImage() async {
+    if (widget.userModel.profileImageUrl != null &&
+        widget.userModel.profileImageUrl != '') {
+      return widget.userModel.profileImageUrl;
+    }
     return await _profileEditingController
-        .getUrlFromProfileImageWith(widget.userModel.profileImageReference)
+        .getUrlFromProfileImageWith(widget.userModel)
         .then((urlFromProfileImage) {
       return urlFromProfileImage;
     });

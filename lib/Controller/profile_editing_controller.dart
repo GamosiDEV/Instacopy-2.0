@@ -5,10 +5,8 @@ class ProfileEditingController {
   FirebaseDatabaseController _firebaseDatabaseController =
       FirebaseDatabaseController();
 
-  Future<String> getUrlFromProfileImageWith(
-      String profileImageReference) async {
-    return await _firebaseDatabaseController
-        .getDownloadUrlFrom(profileImageReference);
+  Future<String> getUrlFromProfileImageWith(UsersModel user) async {
+    return await _firebaseDatabaseController.getProfileImageUrlFrom(user);
   }
 
   Future<void> updateProfileImage(

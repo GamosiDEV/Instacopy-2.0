@@ -10,7 +10,7 @@ class UploadsModel {
   Timestamp uploadDateTime;
   String uploadStorageReference = '';
   String uploaderKey;
-  String downloadedImageURL = '';
+  String uploadImageUrl = '';
 
   UploadsModel(this.description, this.uploadDateTime, this.uploaderKey);
 
@@ -24,6 +24,7 @@ class UploadsModel {
       FIRESTORE_DATABASE_UPLOADS_UPLOAD_DATE_TIME: uploadDateTime,
       FIRESTORE_DATABASE_UPLOADS_UPLOAD_STORAGE_REFERENCE:
           uploadStorageReference,
+      FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL: uploadImageUrl,
       FIRESTORE_DATABASE_UPLOADS_UPLOADER_KEY: uploaderKey
     };
   }
@@ -53,6 +54,10 @@ class UploadsModel {
           uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_DATE_TIME];
       this.uploadStorageReference =
           uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_STORAGE_REFERENCE];
+      if (uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL] != null) {
+        this.uploadImageUrl =
+            uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL];
+      }
 
       this.uploaderKey =
           uploadModelMap[FIRESTORE_DATABASE_UPLOADS_UPLOADER_KEY];

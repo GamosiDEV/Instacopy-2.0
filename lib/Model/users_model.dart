@@ -16,6 +16,7 @@ class UsersModel {
   List<String> likesInUploads = [];
   String myLinks = '';
   String profileImageReference = '';
+  String profileImageUrl = '';
   List<String> savedPosts = [];
   List<String> userUploads = [];
 
@@ -42,6 +43,7 @@ class UsersModel {
       FIRESTORE_DATABASE_USERS_DOCUMENT_MY_LINKS: myLinks,
       FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_REFERENCE:
           profileImageReference,
+      FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL: profileImageUrl,
       FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS: savedPosts,
       FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS: userUploads
     };
@@ -104,6 +106,12 @@ class UsersModel {
       profileImageReference = userModelMap[
           FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_REFERENCE];
 
+      if (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL] !=
+          null) {
+        profileImageUrl =
+            userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL];
+      }
+
       savedPosts =
           (userModelMap[FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS] as List)
               .map((item) => item as String)
@@ -116,4 +124,3 @@ class UsersModel {
     }
   }
 }
-

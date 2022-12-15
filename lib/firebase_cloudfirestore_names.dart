@@ -23,6 +23,8 @@ const String FIRESTORE_DATABASE_USERS_DOCUMENT_LIKES_IN_UPLOADS =
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_MY_LINKS = 'my-links';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_REFERENCE =
     'profile-image-reference';
+const String FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL =
+    'profile-image-url';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_SAVED_POSTS = 'saved-posts';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_USER_UPLOADS = 'user-uploads';
 const String FIRESTORE_DATABASE_USERS_DOCUMENT_USERNAME = 'username';
@@ -37,6 +39,7 @@ const String FIRESTORE_DATABASE_UPLOADS_SAVED_BY = 'saved-by';
 const String FIRESTORE_DATABASE_UPLOADS_UPLOAD_DATE_TIME = 'upload-date-time';
 const String FIRESTORE_DATABASE_UPLOADS_UPLOAD_STORAGE_REFERENCE =
     'upload-storage-reference';
+const String FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL = 'upload-image-url';
 const String FIRESTORE_DATABASE_UPLOADS_UPLOADER_KEY = 'uploader-key';
 
 //Coleção de Comentarios
@@ -55,4 +58,3 @@ const String FIRESTORE_DATABASE_COMMENTARIES_KEY_FROM_COMMENT_UPLOAD =
 const String FIREBASE_STORAGE_USERS = '/users/';
 const String FIREBASE_STORAGE_USERS_PROFILE = '/profile-images/';
 const String FIREBASE_STORAGE_USERS_UPLOADS = '/uploads/';
-

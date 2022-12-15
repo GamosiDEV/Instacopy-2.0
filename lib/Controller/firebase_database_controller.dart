@@ -88,11 +88,21 @@ class FirebaseDatabaseController {
         .get();
   }
 
-  Future<String> getProfileImageUrlFrom(String imageReference) async {
-    if (imageReference != null && imageReference != "") {
+  Future<String> getProfileImageUrlFrom(UsersModel user) async {
+    if (user.profileImageReference != null &&
+        user.profileImageReference != "") {
       return await FirebaseStorage.instance
-          .ref(imageReference)
-          .getDownloadURL();
+          .ref(user.profileImageReference)
+          .getDownloadURL()
+          .then((imageUrl) async {
+        await FirebaseFirestore.instance
+            .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+            .doc(user.keyFromUser)
+            .update({
+          FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL: imageUrl
+        });
+        return imageUrl;
+      });
     }
     return '';
   }
@@ -143,10 +153,11 @@ class FirebaseDatabaseController {
           if (uploadKey == uploadDataFromDatabase.id) {
             UploadsModel upload = UploadsModel('', Timestamp.now(), '');
             upload.setUserModelWith(uploadDataFromDatabase.data());
-            await getDownloadUrlFrom(upload.uploadStorageReference)
-                .then((downloadUrl) {
-              upload.downloadedImageURL = downloadUrl.toString();
-            });
+            if (upload.uploadImageUrl == null || upload.uploadImageUrl == '') {
+              await getDownloadUrlFrom(upload).then((downloadUrl) {
+                upload.uploadImageUrl = downloadUrl.toString();
+              });
+            }
             listOfUploads.add(upload);
           }
         }
@@ -156,11 +167,18 @@ class FirebaseDatabaseController {
     return listOfUploads;
   }
 
-  Future<String> getDownloadUrlFrom(String storageReference) async {
+  Future<String> getDownloadUrlFrom(UploadsModel upload) async {
     return await FirebaseStorage.instance
         .ref()
-        .child(storageReference)
-        .getDownloadURL();
+        .child(upload.uploadStorageReference)
+        .getDownloadURL()
+        .then((imageUrl) async {
+      await FirebaseFirestore.instance
+          .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+          .doc(upload.keyFromUpload)
+          .update({FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL: imageUrl});
+      return imageUrl;
+    });
   }
 
   void addIdOfUploadToUser(String keyFromUpload, String uploaderKey) async {
@@ -217,8 +235,17 @@ class FirebaseDatabaseController {
         .update(updadeUser.getMapForUpdadeProfile());
   }
 
-  Future<String> getImageUrlBy(String reference) async {
-    return await FirebaseStorage.instance.ref(reference).getDownloadURL();
+  Future<String> getImageUrlBy(UploadsModel uploadsModel) async {
+    return await FirebaseStorage.instance
+        .ref(uploadsModel.uploadStorageReference)
+        .getDownloadURL()
+        .then((imageUrl) async {
+      await FirebaseFirestore.instance
+          .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+          .doc(uploadsModel.keyFromUpload)
+          .update({FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL: imageUrl});
+      return imageUrl;
+    });
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUploadDataWith(
