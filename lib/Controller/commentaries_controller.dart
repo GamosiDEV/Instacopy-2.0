@@ -28,8 +28,8 @@ class CommentariesController {
     });
   }
 
-  Future<String> getProfileImageWith(String reference) async {
-    return await _firebaseDatabaseController.getProfileImageUrlFrom(reference);
+  Future<String> getProfileImageWith(UsersModel user) async {
+    return await _firebaseDatabaseController.getProfileImageUrlFrom(user);
   }
 
   Future<UploadsModel> getUploadData(String uploadKey) async {

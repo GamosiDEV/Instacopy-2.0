@@ -147,8 +147,7 @@ class _CommentariesViewState extends State<CommentariesView> {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: FutureBuilder(
-                      future: getProfileImageWithReference(
-                          user.profileImageReference),
+                      future: getProfileImageWithReference(user),
                       builder: (context, profileImageSnapshot) {
                         if (profileImageSnapshot != null &&
                             profileImageSnapshot.connectionState ==
@@ -254,8 +253,11 @@ class _CommentariesViewState extends State<CommentariesView> {
     );
   }
 
-  Future<String> getProfileImageWithReference(String userKey) async {
-    return await _commentariesController.getProfileImageWith(userKey);
+  Future<String> getProfileImageWithReference(UsersModel user) async {
+    if (user.profileImageUrl != null && user.profileImageUrl != '') {
+      return user.profileImageUrl;
+    }
+    return await _commentariesController.getProfileImageWith(user);
   }
 
   Future<UploadsModel> getUploadData() async {

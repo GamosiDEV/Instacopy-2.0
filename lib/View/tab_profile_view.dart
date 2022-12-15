@@ -385,9 +385,12 @@ class _TabProfileViewState extends State<TabProfileView> {
     usersModel.setUserModelWith(mapFromSnapshotData);
   }
 
-  Future<String> getProfileImageUrl() {
-    return _tabProfileController
-        .getProfileImageUrlFrom(usersModel.profileImageReference);
+  Future<String> getProfileImageUrl() async {
+    if (usersModel.profileImageUrl != null &&
+        usersModel.profileImageUrl != '') {
+      return usersModel.profileImageUrl;
+    }
+    return await _tabProfileController.getProfileImageUrlFrom(usersModel);
   }
 
   bool hasTheLoggedUserProfile() {
@@ -450,7 +453,7 @@ class _TabProfileViewState extends State<TabProfileView> {
                     fit: BoxFit.fitWidth,
                     alignment: FractionalOffset.center,
                     image: NetworkImage(
-                      uploads[index].downloadedImageURL,
+                      uploads[index].uploadImageUrl,
                     ),
                   ),
                 ),

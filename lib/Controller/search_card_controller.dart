@@ -15,9 +15,8 @@ class SearchCardController {
     return await _firebaseDatabaseController.searchUsers(searchString);
   }
 
-  Future<String> getProfileImageUrlWith(String imageReference) async {
-    return await _firebaseDatabaseController
-        .getProfileImageUrlFrom(imageReference);
+  Future<String> getProfileImageUrlWith(UsersModel user) async {
+    return await _firebaseDatabaseController.getProfileImageUrlFrom(user);
   }
 
   Future<void> followUserBy(String userKey) async {

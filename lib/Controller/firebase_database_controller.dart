@@ -88,11 +88,21 @@ class FirebaseDatabaseController {
         .get();
   }
 
-  Future<String> getProfileImageUrlFrom(String imageReference) async {
-    if (imageReference != null && imageReference != "") {
+  Future<String> getProfileImageUrlFrom(UsersModel user) async {
+    if (user.profileImageReference != null &&
+        user.profileImageReference != "") {
       return await FirebaseStorage.instance
-          .ref(imageReference)
-          .getDownloadURL();
+          .ref(user.profileImageReference)
+          .getDownloadURL()
+          .then((imageUrl) async {
+        await FirebaseFirestore.instance
+            .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+            .doc(user.keyFromUser)
+            .update({
+          FIRESTORE_DATABASE_USERS_DOCUMENT_PROFILE_IMAGE_URL: imageUrl
+        });
+        return imageUrl;
+      });
     }
     return '';
   }
@@ -145,7 +155,7 @@ class FirebaseDatabaseController {
             upload.setUserModelWith(uploadDataFromDatabase.data());
             await getDownloadUrlFrom(upload.uploadStorageReference)
                 .then((downloadUrl) {
-              upload.downloadedImageURL = downloadUrl.toString();
+              upload.uploadImageUrl = downloadUrl.toString();
             });
             listOfUploads.add(upload);
           }

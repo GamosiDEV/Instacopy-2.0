@@ -116,8 +116,7 @@ class _SearchCardViewState extends State<SearchCardView> {
                 child: SizedBox.fromSize(
                   size: Size.fromRadius(32),
                   child: FutureBuilder(
-                      future: getProfileImageUrlWith(
-                          searchUser.profileImageReference),
+                      future: getProfileImageUrlWith(searchUser),
                       builder: (context, snapshotFromProfileImage) {
                         if (snapshotFromProfileImage.data != null &&
                             snapshotFromProfileImage.connectionState ==
@@ -176,8 +175,11 @@ class _SearchCardViewState extends State<SearchCardView> {
     );
   }
 
-  Future<String> getProfileImageUrlWith(String reference) async {
-    return await _searchCardController.getProfileImageUrlWith(reference);
+  Future<String> getProfileImageUrlWith(UsersModel user) async {
+    if (user.profileImageUrl != null && user.profileImageUrl != '') {
+      return user.profileImageUrl;
+    }
+    return await _searchCardController.getProfileImageUrlWith(user);
   }
 
   void followSelectedUserBy(String userKey) async {

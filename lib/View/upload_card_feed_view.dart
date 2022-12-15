@@ -396,8 +396,11 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   Future<String> getProfileImageWithReference() async {
-    return await _uploadCardFeedController
-        .getProfileImageWith(profileUser!.profileImageReference);
+    if (profileUser!.profileImageUrl != null &&
+        profileUser!.profileImageUrl != '') {
+      return profileUser!.profileImageUrl;
+    }
+    return await _uploadCardFeedController.getProfileImageWith(profileUser!);
   }
 
   Future<UploadsModel> getUploadDataWithUploadKey() async {
