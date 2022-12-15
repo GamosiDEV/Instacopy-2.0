@@ -445,6 +445,7 @@ class _TabProfileViewState extends State<TabProfileView> {
         uploads
             .sort((m1, m2) => m2.uploadDateTime.compareTo(m1.uploadDateTime));
         if (index < uploads.length) {
+          print('==========' + uploads[index].uploadImageUrl + '==========');
           return GestureDetector(
             child: SizedBox(
               child: DecoratedBox(

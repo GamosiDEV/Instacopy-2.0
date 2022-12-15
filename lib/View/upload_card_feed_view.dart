@@ -335,8 +335,10 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
   }
 
   Future<String> getUploadImageUrl() async {
-    return await _uploadCardFeedController
-        .getImageUrlBy(upload!.uploadStorageReference);
+    if (upload!.uploadImageUrl != null && upload!.uploadImageUrl != '') {
+      return upload!.uploadImageUrl;
+    }
+    return await _uploadCardFeedController.getImageUrlBy(upload!);
   }
 
   void setLikeToUpload() {

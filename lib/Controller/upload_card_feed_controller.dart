@@ -7,8 +7,8 @@ class UploadCardFeedController {
   FirebaseDatabaseController _firebaseDatabaseController =
       FirebaseDatabaseController();
 
-  Future<String> getImageUrlBy(String reference) async {
-    return await _firebaseDatabaseController.getImageUrlBy(reference);
+  Future<String> getImageUrlBy(UploadsModel upload) async {
+    return await _firebaseDatabaseController.getImageUrlBy(upload);
   }
 
   Future<UsersModel> getProfileUserWith(String userKey) async {
