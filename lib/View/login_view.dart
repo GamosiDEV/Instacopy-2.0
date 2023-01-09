@@ -22,6 +22,8 @@ class _LoginViewState extends State<LoginView> {
 
   LoginController loginController = LoginController();
 
+  bool asPasswordVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -75,12 +77,28 @@ class _LoginViewState extends State<LoginView> {
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       controller: passwordTextFieldController,
-                      obscureText: true,
+                      obscureText: !asPasswordVisible,
                       enableSuggestions: false,
                       autocorrect: false,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: IconButton(
+                            icon: Icon(
+                              asPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                asPasswordVisible = !asPasswordVisible;
+                              });
+                            },
+                          ),
+                          onPressed: () {},
                         ),
                         labelText: 'Senha',
                         hintText: 'Digite sua senha',

@@ -37,6 +37,8 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   static const String DIVERGENT_PASSWORD = 'DIVERGENT_PASSWORD';
   static const String INVALID_PASSWORD_SIZE = 'INVALID_PASSWORD_SIZE';
 
+  bool asPasswordVisible = false;
+
   UsersModel? newUserModel = null;
 
   //bool asSignUpButtonEnabled = false;
@@ -127,12 +129,28 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       controller: passwordTextFieldController,
-                      obscureText: true,
+                      obscureText: !asPasswordVisible,
                       enableSuggestions: false,
                       autocorrect: false,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: IconButton(
+                            icon: Icon(
+                              asPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                asPasswordVisible = !asPasswordVisible;
+                              });
+                            },
+                          ),
+                          onPressed: () {},
                         ),
                         labelText: 'Senha',
                         hintText: 'Digite sua senha',
