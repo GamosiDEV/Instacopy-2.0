@@ -35,6 +35,7 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
   static const String INVALID_PASSWORD = 'INVALID_PASSWORD';
   static const String INVALID_CONFIRM_PASSWORD = 'INVALID_CONFIRM_PASSWORD';
   static const String DIVERGENT_PASSWORD = 'DIVERGENT_PASSWORD';
+  static const String INVALID_PASSWORD_SIZE = 'INVALID_PASSWORD_SIZE';
 
   UsersModel? newUserModel = null;
 
@@ -211,12 +212,24 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
       setErrorHint(INVALID_CONFIRM_PASSWORD);
       asValid = false;
     }
+    if (!asPasswordSizeValid(passwordTextFieldController.text)) {
+      setErrorHint(INVALID_PASSWORD_SIZE);
+      asValid = false;
+    }
+
     if (passwordConfirmTextFieldController.text !=
         passwordTextFieldController.text) {
       setErrorHint(DIVERGENT_PASSWORD);
       asValid = false;
     }
     return asValid;
+  }
+
+  bool asPasswordSizeValid(String password) {
+    if (password.length >= 6 && password.length <= 32) {
+      return true;
+    }
+    return false;
   }
 
   bool asEmailValid(String email) {
@@ -249,6 +262,10 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
       }
       if (field == INVALID_CONFIRM_PASSWORD) {
         passwordConfirmTextFieldErrorHint = 'Senha digitada invalida!';
+      }
+      if (field == INVALID_PASSWORD_SIZE) {
+        passwordTextFieldErrorHint =
+            'Senha deve possuir entre 6 e 32 caracteres';
       }
     });
   }
@@ -289,7 +306,6 @@ class _ResgisterAccountViewState extends State<ResgisterAccountView> {
               email: emailTextFieldController.text,
               fullname: fullnameTextFieldController.text,
               username: usernameTextFieldController.text);
-          //setStorageImageReferenceToNewUserModel(value);
         }
       });
     } on FirebaseAuthException catch (e) {
