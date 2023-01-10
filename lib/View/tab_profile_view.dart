@@ -1,4 +1,6 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -13,6 +15,8 @@ import 'package:instacopy2/View/profile_editing_view.dart';
 import 'package:instacopy2/View/upload_card_feed_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
 import 'package:instacopy2/View/user_upload_feed_view.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TabProfileView extends StatefulWidget {
   final String? profileUserId;
@@ -225,10 +229,58 @@ class _TabProfileViewState extends State<TabProfileView> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            Text(
-                                              usersModel.bio,
-                                              maxLines: 4,
-                                            ),
+                                            usersModel.genere == null
+                                                ? Container()
+                                                : Text(
+                                                    'Genero ' +
+                                                        usersModel.genere,
+                                                    style: TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline),
+                                                  ),
+                                            AgeCalculator.age(usersModel
+                                                            .birthDate
+                                                            .toDate())
+                                                        .years <
+                                                    18
+                                                ? Container()
+                                                : Text(AgeCalculator.age(
+                                                            usersModel.birthDate
+                                                                .toDate())
+                                                        .years
+                                                        .toString() +
+                                                    ' Anos'),
+                                            usersModel.bio == ''
+                                                ? Container()
+                                                : Text(
+                                                    usersModel.bio,
+                                                    maxLines: 4,
+                                                  ),
+                                            usersModel.myLinks == null
+                                                ? Container()
+                                                : RichText(
+                                                    maxLines: 1,
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: usersModel
+                                                              .myLinks,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.blue),
+                                                          recognizer:
+                                                              TapGestureRecognizer()
+                                                                ..onTap = () {
+                                                                  launchUrl(Uri.parse(
+                                                                      getCorrectURI(
+                                                                          usersModel
+                                                                              .myLinks)));
+                                                                },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                           ],
                                         ),
                                       ),
@@ -445,7 +497,6 @@ class _TabProfileViewState extends State<TabProfileView> {
         uploads
             .sort((m1, m2) => m2.uploadDateTime.compareTo(m1.uploadDateTime));
         if (index < uploads.length) {
-          print('==========' + uploads[index].uploadImageUrl + '==========');
           return GestureDetector(
             child: SizedBox(
               child: DecoratedBox(
@@ -557,5 +608,12 @@ class _TabProfileViewState extends State<TabProfileView> {
             ],
           );
         });
+  }
+
+  String getCorrectURI(String uri) {
+    if (uri.contains('https://') || uri.contains('http://')) {
+      return uri;
+    }
+    return 'http://' + uri;
   }
 }
