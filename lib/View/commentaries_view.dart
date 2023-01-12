@@ -96,9 +96,13 @@ class _CommentariesViewState extends State<CommentariesView> {
                         Expanded(
                           flex: 1,
                           child: TextButton(
-                            onPressed: () =>
+                            onPressed: () {
+                              if (_newCommentarieTextFieldController.text !=
+                                  '') {
                                 sendCommentarieToDatabaseAndRefresh(
-                                    selectedUpload),
+                                    selectedUpload);
+                              }
+                            },
                             child: Text(
                               'Publicar',
                             ),

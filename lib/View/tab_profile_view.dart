@@ -229,7 +229,8 @@ class _TabProfileViewState extends State<TabProfileView> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            usersModel.genere == null
+                                            usersModel.genere == '' ||
+                                                    usersModel.genere == null
                                                 ? Container()
                                                 : Text(
                                                     'Genero ' +
