@@ -59,7 +59,7 @@ class _CommentariesViewState extends State<CommentariesView> {
                               itemCount: listOfComments.length,
                               itemBuilder: (context, index) {
                                 return getAndShowCommentary(
-                                    listOfComments[index]);
+                                    listOfComments[index], selectedUpload);
                               },
                             );
                           }
@@ -134,7 +134,8 @@ class _CommentariesViewState extends State<CommentariesView> {
         _newCommentarieTextFieldController.text, selectedUpload);
   }
 
-  Widget getAndShowCommentary(CommentarieModel commentarieModel) {
+  Widget getAndShowCommentary(
+      CommentarieModel commentarieModel, UploadsModel selectedUpload) {
     return FutureBuilder(
       future: getUserFromCommentarieWith(commentarieModel.sendedByKey),
       builder: (context, snapshot) {
@@ -143,7 +144,7 @@ class _CommentariesViewState extends State<CommentariesView> {
           UsersModel user = UsersModel(keyFromUser: '');
           user = snapshot.data as UsersModel;
           return Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(6.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,6 +171,7 @@ class _CommentariesViewState extends State<CommentariesView> {
                 ),
                 Expanded(
                   child: Container(
+                    padding: EdgeInsets.all(4.0),
                     alignment: Alignment.topLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,6 +200,8 @@ class _CommentariesViewState extends State<CommentariesView> {
                   child: Column(
                     children: [
                       IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints.tight(Size(24, 24)),
                         onPressed: () {
                           if (hasCommentLiked(commentarieModel)) {
                             removeLikeFrom(commentarieModel);
@@ -217,6 +221,21 @@ class _CommentariesViewState extends State<CommentariesView> {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints.tight(Size(24, 24)),
+                      onPressed: (selectedUpload.uploaderKey ==
+                                  ApplicationController().getLoggedUserId() ||
+                              commentarieModel.sendedByKey ==
+                                  ApplicationController().getLoggedUserId())
+                          ? () {
+                              deleteCommentarie(commentarieModel);
+                            }
+                          : null,
+                      icon: Icon(Icons.close)),
+                )
               ],
             ),
           );
@@ -283,5 +302,43 @@ class _CommentariesViewState extends State<CommentariesView> {
 
   void sendLikeFor(CommentarieModel comment) {
     _commentariesController.sendLikeFor(comment);
+  }
+
+  void deleteCommentarie(CommentarieModel commentarieModel) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Excluir Comentario?'),
+            content: Text('Deseja realmente excluir este comentario?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancelar',
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  deleteCommentarieFromDatabase(commentarieModel);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Excluir',
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void deleteCommentarieFromDatabase(CommentarieModel commentarieModel) {
+    _commentariesController
+        .deleteCommentarieFromDatabase(commentarieModel)
+        .then((value) {
+      setState(() {});
+    });
   }
 }

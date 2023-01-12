@@ -49,4 +49,10 @@ class CommentariesController {
   void sendLikeFor(CommentarieModel comment) {
     _firebaseDatabaseController.sendLikeFor(comment);
   }
+
+  Future<void> deleteCommentarieFromDatabase(
+      CommentarieModel commentarieModel) async {
+    return _firebaseDatabaseController
+        .deleteCommentarieFromDatabase(commentarieModel);
+  }
 }

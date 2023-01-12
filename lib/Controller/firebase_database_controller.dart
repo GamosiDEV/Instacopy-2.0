@@ -637,4 +637,29 @@ class FirebaseDatabaseController {
 
     return feedList;
   }
+
+  Future<void> deleteCommentarieFromDatabase(
+      CommentarieModel commentarieModel) async {
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
+        .doc(commentarieModel.keyFromComment)
+        .delete();
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
+        .doc(commentarieModel.sendedByKey)
+        .update({
+      FIRESTORE_DATABASE_USERS_DOCUMENT_COMMENTS_SENDED:
+          FieldValue.arrayRemove([commentarieModel.keyFromComment])
+    });
+
+    await FirebaseFirestore.instance
+        .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
+        .doc(commentarieModel.keyFromUpload)
+        .update({
+      FIRESTORE_DATABASE_UPLOADS_COMMENT_KEYS:
+          FieldValue.arrayRemove([commentarieModel.keyFromComment])
+    });
+    //TODO: Verirficar a necessidade de remover o id do mesmo dos usuarios que deram LIKE
+  }
 }
