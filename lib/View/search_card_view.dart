@@ -105,7 +105,9 @@ class _SearchCardViewState extends State<SearchCardView> {
               profileUserId: searchUser.keyFromUser,
             ),
           ),
-        );
+        ).then((value) {
+          setState(() {});
+        });
       },
       child: Card(
         child: Row(

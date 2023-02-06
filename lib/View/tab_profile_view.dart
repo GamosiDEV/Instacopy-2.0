@@ -42,9 +42,12 @@ class _TabProfileViewState extends State<TabProfileView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeFeedView()));
-        return false;
+        if (ModalRoute.of(context)!.isFirst) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomeFeedView()),
+              (Route<dynamic> route) => false);
+        }
+        return true;
       },
       child: FutureBuilder(
           future: getProfileUserDataByUserId(),
