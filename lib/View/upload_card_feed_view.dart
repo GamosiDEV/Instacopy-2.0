@@ -460,7 +460,10 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
       MaterialPageRoute(
         builder: (context) => UploadEditorView(upload: upload!),
       ),
-    );
+    ).whenComplete(() {
+      Navigator.of(context).pop();
+    });
+
     //TODO: SEND TO EDIT UPLOAD VIEW
   }
 
@@ -473,9 +476,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
             content: Text('Deseja realmente excluir esta postagem?'),
             actions: [
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () {},
                 child: Text(
                   'Cancelar',
                 ),
@@ -483,7 +484,7 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
               TextButton(
                 onPressed: () {
                   deleteUploadFromDatabase();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.of(context).pop();
                 },
                 child: Text(
                   'Excluir',
@@ -491,12 +492,16 @@ class _UploadCardFeedViewState extends State<UploadCardFeedView> {
               ),
             ],
           );
-        });
+        }).whenComplete(() {
+      Navigator.of(context).pop();
+    });
   }
 
   void deleteUploadFromDatabase() {
     if (upload != null) {
-      _uploadCardFeedController.deleteUploadFromDatabase(upload!);
+      _uploadCardFeedController
+          .deleteUploadFromDatabase(upload!)
+          .whenComplete(() {});
     }
   }
 }

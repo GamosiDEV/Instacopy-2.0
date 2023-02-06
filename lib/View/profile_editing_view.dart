@@ -191,7 +191,9 @@ class _ProfileEditingViewState extends State<ProfileEditingView> {
                               lastDate: DateTime.now(),
                             ).then((value) {
                               setState(() {
-                                birth = value!;
+                                if (value != null) {
+                                  birth = value;
+                                }
                                 setBirthDateToController();
                               });
                             });

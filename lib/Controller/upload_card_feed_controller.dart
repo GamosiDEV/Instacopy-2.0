@@ -65,7 +65,7 @@ class UploadCardFeedController {
         uploadKey, likedByUserKey);
   }
 
-  void deleteUploadFromDatabase(UploadsModel upload) {
-    _firebaseDatabaseController.deleteUploadFromDatabase(upload);
+  Future<void> deleteUploadFromDatabase(UploadsModel upload) async {
+    await _firebaseDatabaseController.deleteUploadFromDatabase(upload);
   }
 }

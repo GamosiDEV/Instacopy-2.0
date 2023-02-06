@@ -44,15 +44,15 @@ class _UploadEditorViewState extends State<UploadEditorView> {
         actions: [
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: _uploadDescriptionController.text !=
-                    widget.upload.description
-                ? () {
-                    updateDescription();
-                    ApplicationController.showSnackBar(
-                        'Descrição atualizada!', context);
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  }
-                : null,
+            onPressed:
+                _uploadDescriptionController.text != widget.upload.description
+                    ? () {
+                        updateDescription();
+                        ApplicationController.showSnackBar(
+                            'Descrição atualizada!', context);
+                        Navigator.of(context).pop();
+                      }
+                    : null,
           ),
         ],
       ),
