@@ -42,7 +42,6 @@ class _UploadImageViewState extends State<UploadImageView> {
                   ? () {
                       disableUploadButton();
                       sendNewUploadToLoggedProfile();
-                      popUploadImageView();
                     }
                   : null,
               icon: Icon(Icons.check))
@@ -111,8 +110,12 @@ class _UploadImageViewState extends State<UploadImageView> {
 
   void sendNewUploadToLoggedProfile() {
     UploadsModel upload = getModelFromData();
-    _uploadImageController.sendNewImageToStorageAndUploadToDatabase(
-        upload, _selectedFilePath.toString());
+    _uploadImageController
+        .sendNewImageToStorageAndUploadToDatabase(
+            upload, _selectedFilePath.toString())
+        .then((value) {
+      popUploadImageView();
+    });
   }
 
   UploadsModel getModelFromData() {

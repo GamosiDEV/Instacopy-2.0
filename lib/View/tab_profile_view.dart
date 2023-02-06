@@ -461,7 +461,12 @@ class _TabProfileViewState extends State<TabProfileView> {
   }
 
   void toUploadImageView() {
-    _applicationController.toUploadImageView(context, widget.loggedUserId);
+    _applicationController
+        .toUploadImageView(context, widget.loggedUserId)
+        .then((value) async {
+      await Future.delayed(Duration(seconds: 5));
+      setState(() {});
+    });
   }
 
   void scrollScreenToUploadsCard() {
@@ -482,7 +487,9 @@ class _TabProfileViewState extends State<TabProfileView> {
             builder: (context) => FollowView(
                   initialIndex: index,
                   actualProfileData: usersModel,
-                )));
+                ))).then((value) {
+      setState(() {});
+    });
   }
 
   Widget showOnGrid(List<UploadsModel> uploads) {
@@ -514,9 +521,6 @@ class _TabProfileViewState extends State<TabProfileView> {
             ),
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              print('===|LOGGED USER:' +
-                  widget.loggedUserId.toString() +
-                  ' |===');
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -529,7 +533,9 @@ class _TabProfileViewState extends State<TabProfileView> {
                     indexOfUpload: index,
                   ),
                 ),
-              );
+              ).then((value) {
+                setState(() {});
+              });
               //TODO: Enviar para a tela de feed do perfil, aquela lista scrollavel
               //que exibe todas as fotos da pessoa
             },

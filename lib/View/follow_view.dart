@@ -24,6 +24,12 @@ class FollowView extends StatefulWidget {
 
 class _FollowViewState extends State<FollowView> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: widget.initialIndex,
@@ -36,16 +42,16 @@ class _FollowViewState extends State<FollowView> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  widget.actualProfileData.followedBy.length.toString() +
-                      ' Seguidores',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  'Seguidores',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  widget.actualProfileData.followerOf.length.toString() +
-                      ' Seguindo',
+                  'Seguindo',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),

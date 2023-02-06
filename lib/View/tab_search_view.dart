@@ -18,9 +18,9 @@ class _TabSearchViewState extends State<TabSearchView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeFeedView()));
-        return false;
+        //  Navigator.pushReplacement(context,
+        //      MaterialPageRoute(builder: (context) => const HomeFeedView()));
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
