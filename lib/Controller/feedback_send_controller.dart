@@ -5,7 +5,7 @@ class FeedbackSendController {
   final FirebaseDatabaseController _firebaseDatabaseController =
       FirebaseDatabaseController();
 
-  Future<void> sendFeedbackToDatabase(Map<String, String> feedback) async {
+  Future<void> sendFeedbackToDatabase(Map<String, dynamic> feedback) async {
     await _firebaseDatabaseController.sendFeedbakcToDatabase(feedback);
   }
 }

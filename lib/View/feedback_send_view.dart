@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -106,11 +107,13 @@ class _FeedbackSendViewState extends State<FeedbackSendView> {
     });
   }
 
-  Map<String, String> turnFeedbackDataIntoMap() {
+  Map<String, dynamic> turnFeedbackDataIntoMap() {
     return {
       FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_EMAIL: emailTextFieldController.text,
       FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_FEEDBACK_TEXT:
-          feedbackTextFieldController.text
+          feedbackTextFieldController.text,
+      FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_DATE: Timestamp.now(),
+      FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_ASREAD: false,
     };
   }
 

@@ -3,6 +3,8 @@ const String FIRESTORE_DATABASE_COLLECTION_FEEDBACKS = 'feedbacks';
 const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_EMAIL = 'feedback-sended-by';
 const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_FEEDBACK_TEXT =
     'feedback-text';
+const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_DATE = 'feedback-send-date';
+const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_ASREAD = 'feedback-as-read';
 
 //Coleção de Usuarios
 const String FIRESTORE_DATABASE_COLLECTION_USERS = 'users';
