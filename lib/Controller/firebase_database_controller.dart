@@ -74,10 +74,13 @@ class FirebaseDatabaseController {
   }
 
   Future<void> sendFeedbakcToDatabase(Map<String, dynamic> feedback) async {
-    await FirebaseFirestore.instance
+    final instance = await FirebaseFirestore.instance
         .collection(FIRESTORE_DATABASE_COLLECTION_FEEDBACKS)
-        .doc()
-        .set(feedback);
+        .doc();
+
+    feedback.addAll({FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_KEY: instance.id});
+
+    instance.set(feedback);
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getProfileUserData(

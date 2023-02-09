@@ -1,5 +1,6 @@
 //Coleção de Feedback
 const String FIRESTORE_DATABASE_COLLECTION_FEEDBACKS = 'feedbacks';
+const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_KEY = 'feedback_key';
 const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_EMAIL = 'feedback-sended-by';
 const String FIRESTORE_DATABASE_FEEDBACK_DOCUMENT_FEEDBACK_TEXT =
     'feedback-text';
