@@ -19,22 +19,26 @@ class FirebaseDatabaseController {
   static const String FIREBASE_AUTH_EMAIL_ALREADY_IN_USE_ERROR =
       'email-already-in-use';
 
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseStorage = FirebaseStorage.instance;
+  final _firebaseFirestore = FirebaseFirestore.instance;
+
   bool hasLogged() {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (_firebaseAuth.currentUser != null) {
       return true;
     }
     return false;
   }
 
   String? getLoggedUserId() {
-    return FirebaseAuth.instance.currentUser?.uid;
+    return _firebaseAuth.currentUser?.uid;
   }
 
   Future<String> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       return FIREBASE_SUCCESSFUL_LOGIN;
     } on FirebaseAuthException catch (e) {
       if (e.code == FIREBASE_WRONG_PASSWORD) {
@@ -48,17 +52,17 @@ class FirebaseDatabaseController {
   Future<String?> signUpWithEmailAndPassword(
       String email, String password) async {
     String? userCredential = null;
-    await FirebaseAuth.instance
+    await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
       userCredential = value.user?.uid;
     });
-    await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    await _firebaseAuth.currentUser?.sendEmailVerification();
     return userCredential;
   }
 
   Future<void> createNewAccountInUserCollection(UsersModel usersModel) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(usersModel.keyFromUser)
         .set(usersModel.getMapFromThisModel())
@@ -66,15 +70,15 @@ class FirebaseDatabaseController {
   }
 
   Future<void> signOutFromLoggedUser() async {
-    await FirebaseAuth.instance.signOut();
+    await _firebaseAuth.signOut();
   }
 
   Future<void> sendForgotPasswordMessage(String email) async {
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> sendFeedbakcToDatabase(Map<String, dynamic> feedback) async {
-    final instance = await FirebaseFirestore.instance
+    final instance = await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_FEEDBACKS)
         .doc();
 
@@ -85,7 +89,7 @@ class FirebaseDatabaseController {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getProfileUserData(
       String userId) async {
-    return await FirebaseFirestore.instance
+    return await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(userId)
         .get();
@@ -94,11 +98,11 @@ class FirebaseDatabaseController {
   Future<String> getProfileImageUrlFrom(UsersModel user) async {
     if (user.profileImageReference != null &&
         user.profileImageReference != "") {
-      return await FirebaseStorage.instance
+      return await _firebaseStorage
           .ref(user.profileImageReference)
           .getDownloadURL()
           .then((imageUrl) async {
-        await FirebaseFirestore.instance
+        await _firebaseFirestore
             .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
             .doc(user.keyFromUser)
             .update({
@@ -117,17 +121,14 @@ class FirebaseDatabaseController {
         FIREBASE_STORAGE_USERS_UPLOADS +
         upload.keyFromUpload;
 
-    await FirebaseStorage.instance
-        .ref()
-        .child(newImageReference)
-        .putFile(selectedFile);
+    await _firebaseStorage.ref().child(newImageReference).putFile(selectedFile);
 
     return newImageReference;
   }
 
   void setIdToUploadAndSendToDatabase(
       UploadsModel upload, File selectedFile) async {
-    final instance = FirebaseFirestore.instance
+    final instance = _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc();
 
@@ -148,7 +149,7 @@ class FirebaseDatabaseController {
     List<UploadsModel> listOfUploads = [];
 
     for (String uploadKey in listOfKeys) {
-      await FirebaseFirestore.instance
+      await _firebaseFirestore
           .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
           .get()
           .then((allUploads) async {
@@ -171,12 +172,12 @@ class FirebaseDatabaseController {
   }
 
   Future<String> getDownloadUrlFrom(UploadsModel upload) async {
-    return await FirebaseStorage.instance
+    return await _firebaseStorage
         .ref()
         .child(upload.uploadStorageReference)
         .getDownloadURL()
         .then((imageUrl) async {
-      await FirebaseFirestore.instance
+      await _firebaseFirestore
           .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
           .doc(upload.keyFromUpload)
           .update({FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL: imageUrl});
@@ -185,7 +186,7 @@ class FirebaseDatabaseController {
   }
 
   void addIdOfUploadToUser(String keyFromUpload, String uploaderKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(uploaderKey)
         .update({
@@ -207,10 +208,7 @@ class FirebaseDatabaseController {
       setNewProfileImageReferenceToUser(profileImageReference);
     }
 
-    await FirebaseStorage.instance
-        .ref()
-        .child(profileImageReference)
-        .putFile(newImage);
+    await _firebaseStorage.ref().child(profileImageReference).putFile(newImage);
   }
 
   String getStandardProfileImageReference() {
@@ -222,7 +220,7 @@ class FirebaseDatabaseController {
 
   Future<void> setNewProfileImageReferenceToUser(
       String profileImageReference) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -232,18 +230,18 @@ class FirebaseDatabaseController {
   }
 
   Future<void> updadeProfileData(UsersModel updadeUser) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(updadeUser.keyFromUser)
         .update(updadeUser.getMapForUpdadeProfile());
   }
 
   Future<String> getImageUrlBy(UploadsModel uploadsModel) async {
-    return await FirebaseStorage.instance
+    return await _firebaseStorage
         .ref(uploadsModel.uploadStorageReference)
         .getDownloadURL()
         .then((imageUrl) async {
-      await FirebaseFirestore.instance
+      await _firebaseFirestore
           .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
           .doc(uploadsModel.keyFromUpload)
           .update({FIRESTORE_DATABASE_UPLOADS_UPLOAD_IMAGE_URL: imageUrl});
@@ -253,7 +251,7 @@ class FirebaseDatabaseController {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUploadDataWith(
       String uploadId) async {
-    return await FirebaseFirestore.instance
+    return await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(uploadId)
         .get();
@@ -261,7 +259,7 @@ class FirebaseDatabaseController {
 
   Future<void> sendLikeStatusToDatabase(
       String uploadKey, String likedByUserKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(uploadKey)
         .update({
@@ -269,7 +267,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([likedByUserKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(likedByUserKey)
         .update({
@@ -280,7 +278,7 @@ class FirebaseDatabaseController {
 
   Future<void> removeLikeToDatabase(
       String uploadKey, String likedByUserKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(uploadKey)
         .update({
@@ -288,7 +286,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([likedByUserKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(likedByUserKey)
         .update({
@@ -299,7 +297,7 @@ class FirebaseDatabaseController {
 
   Future<void> sendSaveToDatabase(
       String uploadKey, String likedByUserKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(uploadKey)
         .update({
@@ -307,7 +305,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([likedByUserKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(likedByUserKey)
         .update({
@@ -318,7 +316,7 @@ class FirebaseDatabaseController {
 
   Future<void> removeSaveToDatabase(
       String uploadKey, String likedByUserKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(uploadKey)
         .update({
@@ -326,7 +324,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([likedByUserKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(likedByUserKey)
         .update({
@@ -336,14 +334,14 @@ class FirebaseDatabaseController {
   }
 
   Future<void> deleteUploadFromDatabase(UploadsModel upload) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(upload.keyFromUpload)
         .delete();
 
-    await FirebaseStorage.instance.ref(upload.uploadStorageReference).delete();
+    await _firebaseStorage.ref(upload.uploadStorageReference).delete();
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(upload.uploaderKey)
         .update({
@@ -351,8 +349,8 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([upload.keyFromUpload])
     });
 
-    var userCollection = FirebaseFirestore.instance
-        .collection(FIRESTORE_DATABASE_COLLECTION_USERS);
+    var userCollection =
+        _firebaseFirestore.collection(FIRESTORE_DATABASE_COLLECTION_USERS);
     var querySnapshots = await userCollection.get();
     for (var doc in querySnapshots.docs) {
       await doc.reference.update({
@@ -369,7 +367,7 @@ class FirebaseDatabaseController {
   }
 
   void updateDescription(String keyFromUpload, String newDescription) {
-    FirebaseFirestore.instance
+    _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(keyFromUpload)
         .update({FIRESTORE_DATABASE_UPLOADS_DESCRIPTION: newDescription});
@@ -378,7 +376,7 @@ class FirebaseDatabaseController {
   Future<List<UsersModel>> searchUsers(String searchString) async {
     List<UsersModel> listOfUsers = [];
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .get()
         .then((allUsers) async {
@@ -407,7 +405,7 @@ class FirebaseDatabaseController {
     List<UsersModel> listOfUsers = [];
     List<String> listOfFollowersForSearch = [];
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(profileUserKey)
         .get()
@@ -417,7 +415,7 @@ class FirebaseDatabaseController {
       }
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .get()
         .then((allUsers) async {
@@ -447,7 +445,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> followUserBy(String userKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -455,7 +453,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([userKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(userKey)
         .update({
@@ -465,7 +463,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> unfollowUserBy(String userKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -473,7 +471,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([userKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(userKey)
         .update({
@@ -483,7 +481,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> removeFollowerBy(String userKey) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -491,7 +489,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([userKey])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(userKey)
         .update({
@@ -501,7 +499,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> uploadCommentarie(String comment, UploadsModel upload) async {
-    final instance = await FirebaseFirestore.instance
+    final instance = await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
         .doc();
 
@@ -513,7 +511,7 @@ class FirebaseDatabaseController {
 
     await instance.set(commentarieModel.getMapFromThisModel());
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(commentarieModel.sendedByKey)
         .update({
@@ -521,7 +519,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([commentarieModel.keyFromComment])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(commentarieModel.keyFromUpload)
         .update({
@@ -533,7 +531,7 @@ class FirebaseDatabaseController {
   Future<List<CommentarieModel>> getCommentariesWith(
       List<String> commentKeys) async {
     List<CommentarieModel> listOfCommentaries = [];
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
         .get()
         .then((commentSnapshot) {
@@ -557,7 +555,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> removeLikeFrom(CommentarieModel comment) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -565,7 +563,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([comment.keyFromComment])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
         .doc(comment.keyFromComment)
         .update({
@@ -575,7 +573,7 @@ class FirebaseDatabaseController {
   }
 
   Future<void> sendLikeFor(CommentarieModel comment) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .update({
@@ -583,7 +581,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayUnion([comment.keyFromComment])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
         .doc(comment.keyFromComment)
         .update({
@@ -597,7 +595,7 @@ class FirebaseDatabaseController {
 
     List<String> loggedAsUserFollowerOf = [];
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(getLoggedUserId())
         .get()
@@ -609,7 +607,7 @@ class FirebaseDatabaseController {
     });
 
     List<String> keysFromAllUploadsOfAllFollowerOf = [];
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .get()
         .then((allDatabaseUsers) {
@@ -627,7 +625,7 @@ class FirebaseDatabaseController {
     });
 
     for (String uploadKey in keysFromAllUploadsOfAllFollowerOf) {
-      await FirebaseFirestore.instance
+      await _firebaseFirestore
           .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
           .doc(uploadKey)
           .get()
@@ -643,12 +641,12 @@ class FirebaseDatabaseController {
 
   Future<void> deleteCommentarieFromDatabase(
       CommentarieModel commentarieModel) async {
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_COMMENTARIES)
         .doc(commentarieModel.keyFromComment)
         .delete();
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_USERS)
         .doc(commentarieModel.sendedByKey)
         .update({
@@ -656,7 +654,7 @@ class FirebaseDatabaseController {
           FieldValue.arrayRemove([commentarieModel.keyFromComment])
     });
 
-    await FirebaseFirestore.instance
+    await _firebaseFirestore
         .collection(FIRESTORE_DATABASE_COLLECTION_UPLOADS)
         .doc(commentarieModel.keyFromUpload)
         .update({
