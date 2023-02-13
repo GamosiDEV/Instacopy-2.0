@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instacopy2/Controller/application_controller.dart';
 import 'package:instacopy2/Model/commentarie_model.dart';
 import 'package:instacopy2/Model/uploads_model.dart';
 import 'package:instacopy2/Model/users_model.dart';
@@ -198,6 +199,9 @@ class FirebaseDatabaseController {
   Future<void> updadeProfileImage(
       String newProfileImage, String profileImageReference) async {
     File newImage = File(newProfileImage);
+    await ApplicationController()
+        .compressFile(newImage)
+        .then((value) => newImage = value);
 
     if (profileImageReference != getStandardProfileImageReference()) {
       profileImageReference = FIREBASE_STORAGE_USERS +

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:instacopy2/Controller/firebase_database_controller.dart';
 import 'package:instacopy2/View/login_view.dart';
 import 'package:instacopy2/View/upload_image_view.dart';
@@ -47,5 +50,13 @@ class ApplicationController {
 
   String? getLoggedUserId() {
     return _firebaseDatabaseController.getLoggedUserId();
+  }
+
+  Future<File> compressFile(File file) async {
+    File compressedFile = await FlutterNativeImage.compressImage(
+      file.path,
+      quality: 25,
+    );
+    return compressedFile;
   }
 }
