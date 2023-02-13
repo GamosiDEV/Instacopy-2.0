@@ -55,7 +55,7 @@ class ApplicationController {
   Future<File> compressFile(File file) async {
     File compressedFile = await FlutterNativeImage.compressImage(
       file.path,
-      quality: 25,
+      quality: file.lengthSync() < 600000 ? 50 : 25,
     );
     return compressedFile;
   }
