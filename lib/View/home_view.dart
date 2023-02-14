@@ -18,6 +18,7 @@ class HomeFeedView extends StatefulWidget {
 class _HomeFeedViewState extends State<HomeFeedView>
     with TickerProviderStateMixin {
   HomeController _homeController = HomeController();
+  String? loggedUserId = ApplicationController().getLoggedUserId();
 
   int _selectedIndex = 0;
   String appBarTitle = 'Instacopy';
@@ -28,14 +29,14 @@ class _HomeFeedViewState extends State<HomeFeedView>
       body: Center(
         child: [
           TabFeedView(
-            loggedUserId: ApplicationController().getLoggedUserId(),
+            loggedUserId: loggedUserId,
           ),
           TabSearchView(
-            loggedUserId: ApplicationController().getLoggedUserId(),
+            loggedUserId: loggedUserId,
           ),
           TabProfileView(
-            profileUserId: ApplicationController().getLoggedUserId(),
-            loggedUserId: ApplicationController().getLoggedUserId(),
+            profileUserId: loggedUserId,
+            loggedUserId: loggedUserId,
           ),
         ].elementAt(_selectedIndex),
       ),
