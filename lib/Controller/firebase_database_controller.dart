@@ -122,7 +122,8 @@ class FirebaseDatabaseController {
         FIREBASE_STORAGE_USERS_UPLOADS +
         upload.keyFromUpload;
 
-    await _firebaseStorage.ref().child(newImageReference).putFile(selectedFile);
+    await _firebaseStorage.ref().child(newImageReference).putFile(
+        selectedFile, SettableMetadata(cacheControl: "public, max-age=3600"));
 
     return newImageReference;
   }
@@ -212,7 +213,8 @@ class FirebaseDatabaseController {
       setNewProfileImageReferenceToUser(profileImageReference);
     }
 
-    await _firebaseStorage.ref().child(profileImageReference).putFile(newImage);
+    await _firebaseStorage.ref().child(profileImageReference).putFile(
+        newImage, SettableMetadata(cacheControl: "public, max-age=3600"));
   }
 
   String getStandardProfileImageReference() {
