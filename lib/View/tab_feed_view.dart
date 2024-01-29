@@ -35,61 +35,59 @@ class _TabFeedViewState extends State<TabFeedView> {
         ],
       ),
       body: Container(
-        child: Card(
-          child: FutureBuilder(
-            future: getListOfPostForFeed(),
-            builder: (context, feedSnapshot) {
-              if (feedSnapshot != null &&
-                  feedSnapshot.connectionState == ConnectionState.done) {
-                List<UploadsModel> listOfPosts =
-                    feedSnapshot.data as List<UploadsModel>;
-                if (listOfPosts.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Tente procurar e seguir novos usuarios na aba de "Pesquisar" para popular seu feed !',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+        child: FutureBuilder(
+          future: getListOfPostForFeed(),
+          builder: (context, feedSnapshot) {
+            if (feedSnapshot != null &&
+                feedSnapshot.connectionState == ConnectionState.done) {
+              List<UploadsModel> listOfPosts =
+                  feedSnapshot.data as List<UploadsModel>;
+              if (listOfPosts.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Tente procurar e seguir novos usuarios na aba de "Pesquisar" para popular seu feed !',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                }
-                listOfPosts.sort(
-                  (a, b) => b.likedBy.length.compareTo(a.likedBy.length),
-                );
-                listOfPosts.sort(
-                  (a, b) => b.uploadDateTime.compareTo(a.uploadDateTime),
-                );
-                listOfPosts.sort(((a, b) {
-                  if (a.uploaderKey == b.uploaderKey) {
-                    return -1;
-                  }
-                  return 0;
-                }));
-                return RefreshIndicator(
-                  onRefresh: pullToRefresh,
-                  child: ScrollablePositionedList.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(8.0),
-                    itemCount: listOfPosts.length,
-                    itemBuilder: (context, index) {
-                      return UploadCardFeedView(
-                        uploadKey: listOfPosts[index].keyFromUpload,
-                        userUploaderKey: listOfPosts[index].uploaderKey,
-                        loggedUserKey: widget.loggedUserId!,
-                      );
-                    },
                   ),
                 );
               }
-              return Container(
-                alignment: Alignment.center,
-                height: 50,
-                child: CircularProgressIndicator(),
+              listOfPosts.sort(
+                (a, b) => b.likedBy.length.compareTo(a.likedBy.length),
               );
-            },
-          ),
+              listOfPosts.sort(
+                (a, b) => b.uploadDateTime.compareTo(a.uploadDateTime),
+              );
+              listOfPosts.sort(((a, b) {
+                if (a.uploaderKey == b.uploaderKey) {
+                  return -1;
+                }
+                return 0;
+              }));
+              return RefreshIndicator(
+                onRefresh: pullToRefresh,
+                child: ScrollablePositionedList.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(8.0),
+                  itemCount: listOfPosts.length,
+                  itemBuilder: (context, index) {
+                    return UploadCardFeedView(
+                      uploadKey: listOfPosts[index].keyFromUpload,
+                      userUploaderKey: listOfPosts[index].uploaderKey,
+                      loggedUserKey: widget.loggedUserId!,
+                    );
+                  },
+                ),
+              );
+            }
+            return Container(
+              alignment: Alignment.center,
+              height: 50,
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );

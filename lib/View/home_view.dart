@@ -77,3 +77,53 @@ class _HomeFeedViewState extends State<HomeFeedView>
     });
   }
 }
+/**
+
+Container(
+    width: 1080,
+    height: 384,
+    child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+            Container(
+                width: 1080,
+                height: 384,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Container(
+                            width: 345,
+                            height: 247.21,
+                            child: Stack(
+                                children: [
+                                    Positioned(
+                                        left: 72.48,
+                                        top: 11.71,
+                                        child: Container(
+                                            width: 190.38,
+                                            height: 197,
+                                            decoration: ShapeDecoration(
+                                                gradient: LinearGradient(
+                                                    begin: Alignment(0.00, -1.00),
+                                                    end: Alignment(0, 1),
+                                                    colors: [Color(0xFF2196F4), Color(0xFF43174E)],
+                                                ),
+                                                shape: OvalBorder(),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ),
+                    ],
+                ),
+            ),
+        ],
+    ),
+)
+
+ */
